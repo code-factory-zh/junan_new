@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>后台管理系统</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress加载进度条 -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- 样式 -->
+    <link href="../build/css/custom.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>首页</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- 侧边栏 -->
+            <div id="left_nav">
+            </div>
+            <!--<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">-->
+              <!--<div class="menu_section">-->
+                <!--<ul class="nav side-menu">-->
+                  <!--<li><a href="index.html"><i class="fa fa-home"></i> 接入公司管理 </a></li>-->
+                  <!--<li class="current-page"><a href="course.html"><i class="fa fa-graduation-cap"></i> 课程管理 </a></li>-->
+                  <!--<li><a href="question.html"><i class="fa fa-book"></i> 题目管理 </a></li>-->
+                  <!--<li><a href="exam.html"><i class="fa fa-desktop"></i> 考试管理 </a></li>-->
+                  <!--<li><a href="certificate.html"><i class="fa fa-trophy"></i> 证书管理 </a></li>-->
+                 <!--</ul>-->
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+        </div>
+
+        <!-- 顶部导航栏 -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <!-- 用户名文件在template文件夹下的top_nav.html -->
+              <div class="top_nav_user">
+              </div>
+            </nav>
+          </div>
+        </div>
+        <!-- /顶部导航栏 -->
+
+        <!-- 页面内容 -->
+        <div class="right_col" role="main">
+          <div id="add_edit_course">
+            <h3 class="title">新增课程</h3>
+            <form action="" class="form-horizontal form-label-left">
+              <div class="form-group">
+                <label for="course_name" class="control-label col-md-3 col-sm-3 col-xs-12">课程名称</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text" name="name" id="course_name" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请输入课程名称">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="course_price" class="control-label col-md-3 col-sm-3 col-xs-12">课程价格</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text" name="price" id="course_price" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请填写课程价格">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="gangwei" class="control-label col-md-3 col-sm-3 col-xs-12">岗位</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <select id="gangwei" class="form-control" name="gangwei">
+                    <option value="">请选择岗位</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="intro" class="control-label col-md-3 col-sm-3 col-xs-12">简介</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <textarea name="intro" id="intro" rows="10" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="btns col-xs-12" style="text-align: center;margin-top: 20px;">
+                <a href="course.html"><button class="btn btn-default btn-sm" type="button">取消</button></a>
+                <button class="btn btn-success btn-sm" type="submit">保存</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- /页面内容 -->
+
+        <!-- 底部 -->
+        <footer>
+          <div class="pull-right" style="text-align:center;width: 100%;">
+            后台管理系统
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /底部 -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick解决移动端点击事件的偏移问题需要 -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress加载进度条需要 -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.js"></script>
+    <!-- 新增、编辑课程js -->
+    <script src="./js/course_add_edit.js"></script>
+  </body>
+</html>

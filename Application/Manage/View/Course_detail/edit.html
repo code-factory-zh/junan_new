@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/static/assets/images/favicon.ico" type="image/ico" />
+
+    <title>后台管理系统</title>
+
+    <!-- Bootstrap -->
+    <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress加载进度条 -->
+    <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- 样式 -->
+    <link href="/static/build/css/custom.css" rel="stylesheet">
+    <!-- web Uploader -->
+    <link rel="stylesheet" href="/static/build/css/webuploader.css">
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>首页</span></a>
+                </div>
+
+                <div class="clearfix"></div>
+                <include file="public/header" />
+            </div>
+        </div>
+
+        <!-- 顶部导航栏 -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <!-- 用户名文件在template文件夹下的top_nav.html -->
+                    <div class="top_nav">
+                        <include file="public/top_nav" />
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- /顶部导航栏 -->
+
+        <!-- 页面内容 -->
+        <div class="right_col" role="main">
+            <div id="add_edit_course">
+                <h3 class="title"><if condition="$record.id == ''">新增<else/>修改</if>章节</h3>
+                <form action="" method="post" class="form-horizontal form-label-left" id="form">
+                    <div class="form-group">
+                        <label for="course_name" class="control-label col-md-3 col-sm-3 col-xs-12">章节名称</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" required name="chapter" id="course_name" value="{$record.chapter}" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请输入章节名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="course_name" class="control-label col-md-3 col-sm-3 col-xs-12">章节描述</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" required name="detail" id="detail" value="{$record.chapter}" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请输入章节描述">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="course_price" class="control-label col-md-3 col-sm-3 col-xs-12">章节顺序</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="number" min="1" value="{$record.sort}" name="sort" id="course_price" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请填写章节顺序" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">文件类型</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="radio" name="type" id="file_type1" value="1" <if condition="$record.id  == '' || $record.type == 1">checked</if> style="margin-top: 10px"> <label for="file_type1">文字</label>
+                            <br>
+                            <input type="radio" name="type" id="file_type2" value="2" <if condition="$record.type == 2">checked</if> > <label for="file_type2">PPT</label>
+                            <br>
+                            <input type="radio" name="type" id="file_type3" value="3" <if condition="$record.type == 3">checked</if>> <label for="file_type3">视频</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group toggleShow" <if condition="$record.id != '' && $record.type != 1">style="display:none"</if>>
+                    <label for="content" class="control-label col-md-3 col-sm-3 col-xs-12">详细内容</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <textarea name="content" id="content" rows="10" class="form-control">{$record.content}</textarea>
+                    </div>
+            </div>
+            <input type="hidden" name="course_id" value="{$course_id}">
+            <input type="hidden" name="id" value="{$record.id}">
+            <!--<input type="hidden" id="content" name="content" value="{$record.content}">-->
+            </form>
+            <form class="form-horizontal form-label-left">
+                <div class="form-group toggleShow" <if condition="$record.id == '' || $record.type == 1">style="display: none"</if>>
+                <div class="control-label col-md-3 col-sm-3 col-xs-12">上传文件</div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <if condition="$record.content != ''"><a href="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/Uploads/'; ?>{$record.content}" target="_blank">点击查看文件</a></if>
+                    <div id="uploader" class="wu-example">
+                        <!--用来存放文件信息-->
+                        <div id="thelist" class="uploader-list"></div>
+                        <div class="btns" style="position: relative;height: 40px;">
+                            <div id="picker">选择文件</div>
+                            <!--<button id="ctlBtn" class="btn btn-sm btn-success" type="button">开始上传</button>
+                            <button class="btn btn-sm btn-default stop" type="button">暂停</button>
+                            <button class="btn btn-sm btn-default upload" type="button">继续</button>
+                            <button class="btn btn-sm btn-danger cancel" type="button">取消</button>-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="btns col-xs-12 twoBtn" style="text-align: center;margin-top:50px;">
+            <a href="/manage/course_detail/index?id={$course_id}"><button class="btn btn-default btn-sm" type="button">取消</button></a>
+            <button class="btn btn-success btn-sm" id="save" onclick="formSubmit()">保存</button>
+            <if condition="$courseid && $id">
+                <button class="btn btn-error btn-sm" id="preview" onclick="previewSubmit()">预览</button>
+            </if>
+        </div>
+        </div>
+    <!-- /页面内容 -->
+</div>
+
+<!-- 底部 -->
+<footer>
+    <div class="pull-right" style="text-align:center;width: 100%;">
+        后台管理系统
+    </div>
+    <div class="clearfix"></div>
+</footer>
+<!-- /底部 -->
+</div>
+
+<!-- jQuery -->
+<script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- FastClick解决移动端点击事件的偏移问题需要 -->
+<script src="/static/vendors/fastclick/lib/fastclick.js"></script>
+<!-- NProgress加载进度条需要 -->
+<script src="/static/vendors/nprogress/nprogress.js"></script>
+<!-- Custom Theme Scripts -->
+<script src="/static/build/js/custom.js"></script>
+<!-- web Uploader.js -->
+<script src="/static/build/js/webuploader.min.js"></script>
+<!-- 新增、编辑章节js -->
+<script src="/static/build/js/chapter_add_edit.js"></script>
+<script>
+    function formSubmit() {
+        $('#form').submit();
+    }
+    $("#form").submit(function () {
+        var course_id = $('input[name="course_id"]').val();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            dataType: 'JSON',
+            data: $(this).serialize(),
+            success: function (e) {
+                if (e.code != 0) {
+                    alert(e.msg)
+                } else {
+                    window.location.href = '/manage/course_detail/index?course_id=' + course_id;
+                }
+            }
+        })
+        return false
+    })
+
+    function previewSubmit() {
+
+        var course_id = {$courseid}
+
+        $.ajax({
+            url:  '/manage/courseDetail/preview',
+            data: {course_id: course_id},
+            dataType: "json",
+            type: "post",
+            success: function(r) {
+                alert(r.msg)
+            },
+        })
+    }
+</script>
+</body>
+</html>

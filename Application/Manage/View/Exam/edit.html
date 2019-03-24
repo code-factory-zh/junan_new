@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>后台管理系统</title>
+
+    <!-- Bootstrap -->
+    <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/static/build/css/custom.css" rel="stylesheet">
+
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>首页</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <include file="public/header" />
+          </div>
+        </div>
+
+        <!-- 顶部导航栏 -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <!-- 用户名文件在template文件夹下的top_nav.html -->
+              <div class="top_nav">
+                <include file="public/top_nav" />
+              </div>
+            </nav>
+          </div>
+        </div>
+        <!-- /顶部导航栏 -->
+
+        <!-- 页面内容 -->
+        <div class="right_col" role="main">
+          <div id="add_edit_course">
+            <h3 class="title">新增考试</h3>
+            <form action="" id="form" class="form-horizontal form-label-left">
+                <input type="hidden" name="id" value="{$id}" />
+              <div class="form-group">
+                <label for="course_name" class="control-label col-md-3 col-sm-3 col-xs-12">试题名称</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text" name="name" id="course_name" value="{$name}" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请输入试题名称">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="course_price" class="control-label col-md-3 col-sm-3 col-xs-12">考试时长:分钟</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text" name="time" value="{$time}" id="course_price" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请填写考试时长">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="course_id" class="control-label col-md-3 col-sm-3 col-xs-12">课程</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <select id="course_id" class="form-control" name="course_id">
+                    <option value="">请选择课程</option>
+                    <foreach name="course" key="k" item="v">
+                      <option value="{$v['id']}" <if condition="$v['id'] eq $course_id">selected</if>>{$v['name']}</option>
+                    </foreach>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pass_score" class="control-label col-md-3 col-sm-3 col-xs-12">及格分数</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="number" name="pass_score" value="{$pass_score}" id="pass_score" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请填写及格分数">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="gangwei" class="control-label col-md-3 col-sm-3 col-xs-12">题型</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 tixing">
+                    <div class="line">
+                        <span>单选题</span><input type="number" value="{$dx_question_amount}" name="dx_question_amount" class="input_num"><span>题，每题</span><input type="number" value="{$dx_question_score}" name="dx_question_score" class="input_num">分，共<span id="t1" class="total">{$dx_question_score * $dx_question_amount}</span>分
+                    </div>
+                    <div class="line">
+                        <span>复选题</span><input value="{$fx_question_amount}" type="number" name="fx_question_amount" class="input_num"><span>题，每题</span><input value="{$fx_question_score}" type="number" name="fx_question_score" class="input_num">分，共<span id="t2" class="total">{$fx_question_score * $fx_question_amount}</span>分
+                    </div>
+                    <div class="line">
+                        <span>判断题</span><input type="number" value="{$pd_question_amount}" name="pd_question_amount" class="input_num"><span>题，每题</span><input value="{$pd_question_score}" type="number" name="pd_question_score" class="input_num">分，共<span id="t3" class="total">{$pd_question_score * $pd_question_amount}</span>分
+                    </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="intro" class="control-label col-md-3 col-sm-3 col-xs-hidden"></label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <p style="text-align:right;">总分固定100分，目前计算得<span id="totalscore">{$score}</span>分。</p>
+                </div>
+                </div>
+              <div class="form-group">
+                <label for="intro" class="control-label col-md-3 col-sm-3 col-xs-12">简介</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <textarea name="detail" id="intro" rows="5" class="form-control">{$detail}</textarea>
+                </div>
+              </div>
+              <div class="btns col-xs-12" style="text-align: center;margin-top: 20px;">
+                <a href="exam.html"><button class="btn btn-default btn-sm" type="button">取消</button></a>
+                <button id="submit" mark="0" class="btn btn-success btn-sm" type="submit">保存</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- /页面内容 -->
+
+        <!-- 底部 -->
+        <footer>
+          <div class="pull-right" style="text-align:center;width: 100%;">
+            后台管理系统
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /底部 -->
+      </div>
+    </div>
+    <!-- jQuery -->
+    <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="/static/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="/static/vendors/nprogress/nprogress.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="/static/build/js/custom.js"></script>
+
+    <script>
+        $(function() {
+            $('#form').submit(function () {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: $(this).serialize(),
+                    success: function(e) {
+                        if (e.code == 0) {
+                            window.location.href = "/manage/exam/list"
+                        } else {
+                            alert(e.msg)
+                        }
+                    },
+                })
+                return false
+            })
+
+          $(".tixing input").keyup(function (e) {
+//            debugger;
+            if( $(this).val() && $(this).siblings("input").val() ){
+              var total = parseInt( $(this).val() ) * parseInt( $(this).siblings("input").val() );
+              $(this).siblings(".total").text(total);
+              var totalscore = parseInt( $("#t1").text() ) + parseInt( $("#t2").text() ) + parseInt( $("#t3").text() );
+              $("#totalscore").text(totalscore);
+            }else{
+              $(this).siblings(".total").text(0);
+            }
+          });
+//          提交
+          $("#submit").click(function(e){
+            var totalscore = $("#totalscore").text();
+            var course_name = $("#course_name").val();
+            var course_price = $("#course_price").val();
+            var course_id = $("#course_id").val();
+            var pass_score = $("#pass_score").val();
+
+            if(!course_name){
+              alert('请填写试题名称');
+              return false;
+            }
+
+            if(!course_price){
+              alert('请填写考试时长');
+              return false;
+            }
+
+            if(!course_id){
+              alert('请选择一个课程');
+              return false;
+            }
+
+            if(!pass_score){
+              alert('请填写及格分数');
+              return false;
+            }
+
+            if( parseInt(totalscore) != 100 ){
+              alert('总分只能为100');
+              return false;
+            }
+          })
+        })
+    </script>
+  </body>
+</html>

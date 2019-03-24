@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>后台管理系统</title>
+
+      <!-- Bootstrap -->
+      <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+      <!-- NProgress加载进度条 -->
+      <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+      <!-- 样式 -->
+      <link href="/static/build/css/custom.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+                <a href="account.html" class="site_title"><i class="fa fa-paw"></i> <span>首页</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <include file="public/header" />
+          </div>
+        </div>
+
+        <!-- 顶部导航栏 -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <!-- 用户名文件在template文件夹下的top_nav.html -->
+              <div class="top_nav">
+                <include file="public/top_nav" />
+              </div>
+            </nav>
+          </div>
+        </div>
+        <!-- /顶部导航栏 -->
+
+        <!-- 页面内容 -->
+        <div class="right_col" style="position: relative;" role="main">
+            <div id="course_list">
+                <table class="full_width_table">
+                    <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>课程价格</th>
+                        <th>已报名人数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <foreach name="list" key="k" item="v">
+                    <tr>
+                      <td>{$v.name}</td>
+                      <td>￥ {$v.price}</td>
+                      <td>{$v.amount}</td>
+                      <td class="btn_div">
+                          <a href="/manage/curriculum/show_account?course_id={$v.id}&job_id={$v.job_id}"><button class="btn btn-success btn-sm add_class">添加课程</button></a>
+                      </td>
+                    </tr>
+                    </foreach>
+                </table>
+                <if condition="$buy eq 1">
+                <div>
+                    <a href="/manage/curriculum/order_list"><button class="btn btn-success btn-sm fr" style="margin-top: 10px;">购买添加的课程</button></a>
+                </div>
+                </if>
+            </div>
+            <!-- 添加课程的弹窗 -->
+            <div id="add_course_win" class="add_course_win">
+                <h3 class="title">添加课程{$course_id}</h3>
+                <form action="/manage/curriculum/addcourse" class="form-horizontal form-label-left" id="form">
+                    <input type="hidden" name="course_id" value="{$course_id}" />
+                    <input type="hidden" name="job_id" value="{$job_id}" />
+                    <div class="form-group">
+                        <label for="account1" class="control-label col-md-3 col-sm-3 col-xs-12">手机号</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 line">
+                            <input type="text" name="account1" id="account1" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请填写子账号手机号">
+                            <span class="glyphicon glyphicon-trash" onclick="del_account(1)"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 hidden-xs"></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <button type="button" class="btn btn-sm btn-success" onclick="add_more()">添加更多账号</button>
+                        </div>
+                    </div>
+                    <div class="btns col-xs-12" style="text-align: center;margin-top: 20px;">
+                        <a href="/manage/curriculum/list"><button class="btn btn-default btn-sm" type="button">取消</button></a>
+                        <button class="btn btn-success btn-sm" type="submit">保存</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /添加课程的弹窗 -->
+            </div>
+
+        <!-- /页面内容 -->
+
+        <!-- 底部 -->
+        <footer>
+          <div class="pull-right" style="text-align:center;width: 100%;">
+            后台管理系统
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /底部 -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick解决移动端点击事件的偏移问题需要 -->
+    <script src="/static/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress加载进度条需要 -->
+    <script src="/static/vendors/nprogress/nprogress.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="/static/build/js/custom.js"></script>
+    <!-- 课程管理js -->
+    <script src="/static/studyjs/course.js"></script>
+
+    <script>
+        $('#form').submit(function() {
+            $.post('/manage/curriculum/addcourse', $(this).serialize(), function(rel) {
+                console.log(rel)
+                if (rel.code) {
+                    alert(rel.msg)
+                } else {
+                    window.location.href = '/manage/curriculum/list'
+                }
+            })
+            return false
+        })
+    </script>
+
+  </body>
+</html>

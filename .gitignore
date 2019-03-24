@@ -1,0 +1,10 @@
+.idea/
+ThinkPHP/Library/Vendor/Wxpay/*
+sftp-config.json
+Public/cert/*
+Application/Common/Controller/*
+Application/Common/Conf/*
+Application/Runtime/*
+vendor/
+composer.lock
+Public/Uploads/*

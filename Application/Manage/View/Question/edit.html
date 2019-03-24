@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/static/assets/images/favicon.ico" type="image/ico" />
+
+    <title>后台管理系统</title>
+
+       <!-- Bootstrap -->
+       <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+       <!-- Font Awesome -->
+       <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+       <!-- NProgress加载进度条 -->
+       <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+       <!-- 样式 -->
+       <link href="/static/build/css/custom.css" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>首页</span></a>
+                </div>
+
+                <div class="clearfix"></div>
+                <include file="public/header" />
+            </div>
+        </div>
+
+        <!-- 顶部导航栏 -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <!-- 用户名文件在template文件夹下的top_nav.html -->
+                    <div class="top_nav">
+                        <include file="public/top_nav" />
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- /顶部导航栏 -->
+
+        <!-- 页面内容 -->
+        <div class="right_col" role="main">
+            <div id="add_edit_course">
+                <h3 class="title"><if condition="$record.id != ''">修改<else />新增</if>{$type_name}</h3>
+                <form action="" class="form-horizontal form-label-left" method="post" id="form">
+                    <div class="form-group">
+                        <label for="course_name" class="control-label col-md-3 col-sm-3 col-xs-12">题目名称</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="course_name" name="title" value="{$record.title}" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请输入题目名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="explain" class="control-label col-md-3 col-sm-3 col-xs-12">题目解答</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" id="explain" name="explain" value="{$record.explain}" class="form-control col-md-7 col-xs-12 parsley-success" placeholder="请输入对题目的解答">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gangwei" class="control-label col-md-3 col-sm-3 col-xs-12">课程</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="gangwei" name="course_id" class="form-control">
+                                <option value="">请选择科目</option>
+                                <foreach name="course" key="k" item="v">
+                                    <option value="{$k}" <if condition="$record.course_id == $k">selected</if>>{$v.name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+
+                    <if condition="$type == 1">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">答案</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12" id="answers">
+                                <if condition="$record.id != ''">
+                                    <foreach name="record.option" key="k" item="value">
+                                        <div class="every_answers">
+                                            <input type="radio" name="which" <if condition="$record.answer == $k+1">checked</if> value="{$k+1}">
+                                            <input type="text" name="answer{$k+1}" value="{$value}" class="form-control" placeholder="请输入答案">
+                                            <span class="glyphicon glyphicon-trash" onclick="del_answer({$k+1})"></span>
+                                        </div>
+                                    </foreach>
+                                <else/>
+                                    <div class="every_answers">
+                                        <input type="radio" name="which" checked value="1">
+                                        <input type="text" name="answer1" class="form-control" placeholder="请输入答案">
+                                        <span class="glyphicon glyphicon-trash" onclick="del_answer(1)"></span>
+                                    </div>
+                                </if>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 hidden-xs"></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <button type="button" class="btn btn-sm btn-success" onclick="add_answer()">新增答案</button>
+                            </div>
+                        </div>
+                    <elseif condition="$type == 2"/>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">答案</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12" id="answers">
+                                <if condition="$record.id != ''">
+                                    <foreach name="record.option" key="k" item="value">
+                                        <div class="every_answers">
+                                            <input type="checkbox" name="which" <if condition="$value.answer == 2">checked</if> value="{$k+1}">
+                                            <input type="text" name="answer{$k+1}" value="{$value.value}" class="form-control" placeholder="请输入答案">
+                                            <span class="glyphicon glyphicon-trash" onclick="del_answer({$k+1})"></span>
+                                        </div>
+                                    </foreach>
+                                    <else/>
+                                    <div class="every_answers">
+                                        <input type="checkbox" name="which" checked value="1">
+                                        <input type="text" name="answer1" class="form-control" placeholder="请输入答案">
+                                        <span class="glyphicon glyphicon-trash" onclick="del_answer(1)"></span>
+                                    </div>
+                                </if>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 hidden-xs"></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <button type="button" class="btn btn-sm btn-success" onclick="add_answer()">新增答案</button>
+                            </div>
+                        </div>
+                    <elseif condition="$type == 3"/>
+                        <div class="form-group" id="radio">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">答案</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="radio" value="1" name="answer" id="bingo" style="margin: 10px 5px 0 0;" <if condition="$record.id == '' || $record.id == 1">checked</if>><label for="bingo">正确</label>
+                                <br>
+                                <input type="radio" value="2" name="answer" id="false" <if condition="$record.answer == 2">checked</if> style="margin: 0 5px 0 0;"><label for="false">错误</label>
+                            </div>
+                        </div>
+                    <elseif condition="$type == 4"/>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="answer">答案</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <textarea name="answer" id="answer" class="form-control" >{$record.answer}</textarea>
+                            </div>
+                        </div>
+                    </if>
+
+                    <div class="btns col-xs-12" style="text-align: center;margin-top: 20px;">
+                        <a href="../question/index"><button class="btn btn-default btn-sm" type="button">取消</button></a>
+                        <button class="btn btn-success btn-sm" type="submit">保存</button>
+                    </div>
+                    <input type="hidden" name="type" value="{$type}">
+                    <input type="hidden" name="id" value="{$record.id}">
+                </form>
+            </div>
+        </div>
+        <!-- /页面内容 -->
+
+        <!-- 底部 -->
+        <footer>
+            <div class="pull-right" style="text-align:center;width: 100%;">
+                后台管理系统
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /底部 -->
+    </div>
+</div>
+
+     <!-- jQuery -->
+     <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+     <!-- Bootstrap -->
+     <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+     <!-- FastClick -->
+     <script src="/static/vendors/fastclick/lib/fastclick.js"></script>
+     <!-- NProgress -->
+     <script src="/static/vendors/nprogress/nprogress.js"></script>
+     <!-- Custom Theme Scripts -->
+     <script src="/static/build/js/custom.js"></script>
+<if condition="$type == 1">
+    <script src="/static/build/js/question_radio.js"></script>
+<elseif condition="$type == 2" />
+    <script src="/static/build/js/question_checkbox.js"></script>
+<elseif condition="$type == 4" />
+    <script src='/static/build/js/jquery-autoHeightTextarea.js'></script>
+    <script src="/static/build/js/question_fill_in.js"></script>
+</if>
+
+<script>
+    $("#form").submit(function () {
+        var option = [];
+        var answer = '';
+        var type = "{$type}";
+
+        //判断
+        if (type == 1) {
+            $('#answers>.every_answers').each(function (index) {
+                var o = $(this).find('input[type="text"]').val();
+                if (o != '') {
+                    option.push(o);
+
+                    if ($(this).find('input[name="which"]:checked').val() != undefined) {
+                        answer = index + 1;
+                    }
+                } else {
+                    alert('请把未填写的单选框删除');return false;
+                }
+            })
+
+            if (answer == '') {
+                alert('单选答案不能为空');return false;
+            }
+        }else if (type == 2){
+            var answer = [];
+            $('#answers>.every_answers').each(function (index) {
+                var o = $(this).find('input[type="text"]').val();
+                if (o != '') {
+                    option.push(o);
+
+                    if ($(this).find('input[name="which"]:checked').val() != undefined) {
+                        answer.push(index+1);
+                    }
+                } else {
+                    alert('请把未填写的复选框删除');
+                    return false;
+                }
+            })
+
+            if (answer == []) {
+                alert('复选答案不能为空');
+                return false;
+            }
+        }else if (type == 3) {
+            option = ['正确', '错误'];
+            answer = $('#radio').find("input[name='answer']:checked").val();
+        } else if (type == 4) {
+            option = '';
+            answer = $('#answer').val();
+        }
+
+        var id = $('input[name="id"]').val();
+        var title = $('#course_name').val();
+        var course_id = $('#gangwei').val();
+//        var common = $('#common').val();
+        var explain = $('#explain').val();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            dataType: 'JSON',
+            data: {type:type, option:option, answer:answer, id:id, title:title, course_id:course_id, explain:explain},
+            success: function (e) {
+                if (e.code != 0) {
+                    alert(e.msg)
+                } else {
+                    window.location.href = '../question/index';
+                }
+            }
+        })
+        return false
+    })
+</script>
+
+</body>
+</html>
