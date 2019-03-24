@@ -20,6 +20,8 @@
     <!-- Custom Theme Style -->
     <link href="/static/build/css/custom.css" rel="stylesheet">
 
+
+
   </head>
 
   <body class="nav-md">
@@ -110,7 +112,11 @@
               <div class="form-group">
                 <label for="intro" class="control-label col-md-3 col-sm-3 col-xs-12">简介</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <textarea name="detail" id="intro" rows="5" class="form-control">{$detail}</textarea>
+                  <!--<script id="detail" type="text/plain" style="width:1024px;height:500px;">-->
+
+                  <!--</script>-->
+                  <!--<textarea name="detail" id="detail" rows="5" class="form-control">{$detail}</textarea>-->
+                  <textarea id="detail" name="detail" cols="100" rows="8" style="width:600px;height:260px;"></textarea>
                 </div>
               </div>
               <div class="btns col-xs-12" style="text-align: center;margin-top: 20px;">
@@ -132,9 +138,10 @@
         <!-- /底部 -->
       </div>
     </div>
+
+    <!-- Bootstrap -->
     <!-- jQuery -->
     <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap -->
     <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
     <script src="/static/vendors/fastclick/lib/fastclick.js"></script>
@@ -143,7 +150,17 @@
     <!-- Custom Theme Scripts -->
     <script src="/static/build/js/custom.js"></script>
 
+
+
+
+
+
+
     <script>
+//      var ue = UE.getEditor('detail');
+//
+
+
         $(function() {
             $('#form').submit(function () {
                 $.ajax({
