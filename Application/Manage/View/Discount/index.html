@@ -53,21 +53,21 @@
         <!-- 页面内容 -->
         <div class="right_col" role="main">
           <div id="course_list">
-            <a href="/manage/job/edit"><button class="btn btn-success btn-sm fr" id="add_course">新增工种</button></a>
+            <a href="/manage/discount/edit"><button class="btn btn-success btn-sm fr" id="add_course">新增优惠</button></a>
               <table class="full_width_table">
                  <thead>
                    <tr>
-                     <th>岗位名称</th>
-                     <th>创建时间</th>
+                     <th>报名人数区间</th>
+                     <th>折扣</th>
                      <th>操作</th>
                    </tr>
                  </thead>
                  <foreach name="list" key="k" item="v">
                  <tr>
-                   <td>{$v.name}</td>
-                   <td>{$v.created_time|date='Y年m月d日 H时i分',###}</td>
+                   <td>{$v.discount_min_num}-{$v.discount_max_num}</td>
+                   <td>{$v.discount}</td>
                    <td>
-                      <a href="/manage/job/edit?id={$v.id}"><button class="btn btn-success btn-sm">编辑</button></a>
+                      <a href="/manage/discount/edit?id={$v.id}"><button class="btn btn-success btn-sm">编辑</button></a>
                      <button class="btn btn-danger btn-sm del" idvalue="{$v.id}">删除</button>
                    </td>
                  </tr>
@@ -104,7 +104,7 @@
           id = $(this).attr('idvalue');
 
           $.ajax({
-            url: '/manage/job/del',
+            url: '/manage/discount/del',
             type: 'POST',
             dataType: 'JSON',
             data: {"id":id},
@@ -112,7 +112,7 @@
               if (e.code != 0) {
                 alert(e.msg)
               } else {
-                window.location.href = '/manage/job';
+                window.location.href = '/manage/discount';
               }
             }
           })
