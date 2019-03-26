@@ -29,6 +29,28 @@ class CourseModel extends BaseModel {
 		$data['updated_time'] = time();
 	}
 
+	public function _after_insert($data, $options){
+		//插入成功后,写入表中对应的exam模板库信息
+		$exam_model = new \Manage\Model\ExamModel;
+		$xam_data = [
+			'name' => $data['name'],
+			'detail' => $data['detail'],
+			'course_id' => $data['id'],
+			'time' => 60,
+			'score' => 100,
+			'pass_score' => 60,
+			'pd_question_score' => 60,
+			'pd_question_amount' => 60,
+			'dx_question_score' => 60,
+			'dx_question_amount' => 60,
+			'fx_question_score' => 60,
+			'fx_question_amount' => 60,
+			'created_time' => time(),
+			'updated_time' => time(),
+		];
+		$exam_model->add($xam_data);
+	}
+
 	public function getCourseAmount($where = []) {
 
 		return $this -> where($where) -> getField('amount');
