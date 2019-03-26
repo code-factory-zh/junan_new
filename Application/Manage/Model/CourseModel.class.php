@@ -15,7 +15,7 @@ class CourseModel extends BaseModel {
     {
 		$where['is_deleted'] = 0;
 
-        return $this->where($where)->getField('id, name, job_id, type, amount, detail, created_time');
+        return $this->where($where)->getField('id, name, type, detail, created_time');
     }
 
 	public function _before_insert(&$data, $options)

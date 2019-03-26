@@ -10,14 +10,14 @@
 
     <title>后台管理系统</title>
 
-   <!-- Bootstrap -->
-   <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-   <!-- Font Awesome -->
-   <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-   <!-- NProgress -->
-   <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
-   <!-- Custom Theme Style -->
-   <link href="/static/build/css/custom.css" rel="stylesheet">
+      <!-- Bootstrap -->
+      <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+      <!-- NProgress加载进度条 -->
+      <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+      <!-- 样式 -->
+      <link href="/static/build/css/custom.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -53,45 +53,27 @@
         <!-- 页面内容 -->
         <div class="right_col" role="main">
           <div id="add_edit_course">
-            <h3 class="title"><if condition="$list.id != ''">修改<else />新增</if>课程</h3>
-            <form action="" method="post" class="form-horizontal form-label-left" id="form" url="/manage/job/edit">
+            <h3 class="title">收款账号设置</h3>
+            <form action="/manage/receipt/edit_ajax" method="post" class="form-horizontal form-label-left" id="form" url="/manage/job/edit_ajax">
               <div class="form-group">
-                <label for="name" class="control-label col-md-3 col-sm-3 col-xs-12">课程名称</label>
+                <label for="account_bank" class="control-label col-md-3 col-sm-3 col-xs-12">开户银行</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <input type="text" id="course_name" name="name" class="form-control col-md-7 col-xs-12 parsley-success" value="{$list.name}" placeholder="请填写课程名称">
-                  <input type="hidden" name="id" value="{$list.id}">
+                  <input type="text" id="account_bank" name="account_bank" class="form-control col-md-7 col-xs-12 parsley-success" value="{$list.account_bank}" placeholder="输入开户行">
                 </div>
               </div>
-              <!--<div class="form-group">-->
-                <!--<label for="amount" class="control-label col-md-3 col-sm-3 col-xs-12">课程价格</label>-->
-                <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
-                  <!--<input type="text" name="amount" id="amount" class="form-control col-md-7 col-xs-12 parsley-success" value="{$list.amount}" placeholder="请填写课程价格">-->
-                <!--</div>-->
-              <!--</div>-->
-              <!--<div class="form-group">-->
-                <!--<label for="job_id" class="control-label col-md-3 col-sm-3 col-xs-12">课程类型</label>-->
-                <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
-                  <!--<select id="type" class="form-control" name="type">-->
-                    <!--<option value="0" <if condition="0 eq $list['type']">selected</if>>专业课程</option>-->
-                    <!--<option value="1" <if condition="1 eq $list['type']">selected</if>>通用课程</option>-->
-                  <!--</select>-->
-                <!--</div>-->
-                <!--</div>-->
-              <!--<div class="form-group" id="job_show_display" <if condition="isset($list['job_id']) && $list['job_id'] eq 0">style="display:none"</if>>-->
-                <!--<label for="job_id" class="control-label col-md-3 col-sm-3 col-xs-12">岗位</label>-->
-                <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
-                  <!--<select id="job_id" class="form-control" name="job_id">-->
-                    <!--<option value="0">请选择岗位</option>-->
-                    <!--<foreach name="jobs" key="k" item="v">-->
-                      <!--<option value="{$k}" <if condition="$k eq $list['job_id']">selected</if>>{$v}</option>-->
-                    <!--</foreach>-->
-                  <!--</select>-->
-                <!--</div>-->
-              <!--</div>-->
+
               <div class="form-group">
-                <label for="detail" class="control-label col-md-3 col-sm-3 col-xs-12">简介</label>
+                <label for="account_username" class="control-label col-md-3 col-sm-3 col-xs-12">账户名</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <textarea name="detail" id="intro" rows="10" class="form-control">{$list.detail}</textarea>
+                  <input type="text" id="account_username" name="account_username" class="form-control col-md-7 col-xs-12 parsley-success" value="{$list.account_username}" placeholder="输入账户名">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="account_num" class="control-label col-md-3 col-sm-3 col-xs-12">账户</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text" id="account_num" name="account_num" class="form-control col-md-7 col-xs-12 parsley-success" value="{$list.account_num}" placeholder="输入银行账号">
+                  <input type="hidden" name="id" value="{$list.id}">
                 </div>
               </div>
 
@@ -115,7 +97,7 @@
       </div>
     </div>
 
-  <!-- jQuery -->
+       <!-- jQuery -->
  <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
  <!-- Bootstrap -->
  <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -129,17 +111,6 @@
     <script src="/static/build/js/course_add_edit.js"></script>
 
     <script>
-
-      //如果是专业课程,则不选择岗位
-      $('#type').change(function(){
-        type = $(this).val();
-        if(type == 0){
-          $('#job_show_display').show();
-        }else{
-          $('#job_show_display').hide();
-        }
-      })
-
         $("#form").submit(function () {
 
             $.ajax({
@@ -151,7 +122,7 @@
                     if (e.code != 0) {
                         alert(e.msg)
                     } else {
-                        window.location.href = '/manage/course';
+                        window.location.href = '/manage/receipt/edit';
                     }
                 }
             })

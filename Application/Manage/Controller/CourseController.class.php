@@ -19,7 +19,6 @@ class CourseController extends CommonController {
 		parent::_initialize();
 		$this -> islogin();
 		$this->course = new \Manage\Model\CourseModel;
-		$this->job = new \Manage\Model\JobModel;
 		$this->company_account = new \Wechat\Model\CompanyAccountModel;
 	}
 
@@ -54,14 +53,14 @@ class CourseController extends CommonController {
 				$this->el(0, '课程名称不能为空!');
 			}
 
-			$res = $this->course->getOne('type = 1 and is_deleted = 0');
+//			$res = $this->course->getOne('type = 1 and is_deleted = 0');
 
 			if(!$data['id']){
 				//新增
 				//通用课程只能有一个
-				if($res && ($data['type'] == 1)){
-					$this->e('通用课程只能有一个');
-				}
+//				if($res && ($data['type'] == 1)){
+//					$this->e('通用课程只能有一个');
+//				}
 
 				if($result = $this->course->add($data)){
 					$this->e();
@@ -70,18 +69,18 @@ class CourseController extends CommonController {
 				}
 			}else{
 
-				$course_info_modify = $this->course->getOne('id = ' . $data['id']);
-				if($course_info_modify['type'] == 1 && $data['type'] == 0){
-					$this->e('通用课程不能更改为专业课程');
-				}
-
-				if($data['type'] == 1 && $res['id'] != $data['id']){
-					$this->e('通用课程只能有一个');
-				}
-
-				if($data['type'] == 1){
-					$data['job_id'] = 0;
-				}
+//				$course_info_modify = $this->course->getOne('id = ' . $data['id']);
+//				if($course_info_modify['type'] == 1 && $data['type'] == 0){
+//					$this->e('通用课程不能更改为专业课程');
+//				}
+//
+//				if($data['type'] == 1 && $res['id'] != $data['id']){
+//					$this->e('通用课程只能有一个');
+//				}
+//
+//				if($data['type'] == 1){
+//					$data['job_id'] = 0;
+//				}
 
 				//修改
 				if($result = $this->course->save($data)){
@@ -98,7 +97,7 @@ class CourseController extends CommonController {
 		}
 
 		$data['list'] = $course_info;
-		$data['jobs'] = $this->job->getJobs('id, name');
+//		$data['jobs'] = $this->job->getJobs('id, name');
 		$this->assign($data);
 		$this->display();
 	}
