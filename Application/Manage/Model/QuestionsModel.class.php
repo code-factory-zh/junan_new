@@ -130,4 +130,33 @@ class QuestionsModel extends BaseModel {
 
 		return $this->query($sql);
 	}
+
+	/**
+	 * 出题
+	 *
+	 * @param int $dx
+	 * @param int $fx
+	 * @param int $pd
+	 * @param int $courseId
+	 * return array
+	 * **/
+	public function getIdsNew($dx, $fx, $pd, $courseId)
+	{
+		$dxMajor = $this -> getList(['course_id' => $courseId, 'is_deleted' => 0, 'type' => 1], 'id');
+		$dx_arr = array_rand_value(array_column($dxMajor, 'id'), $dx);
+
+		$fxMajor = $this -> getList(['course_id' => $courseId, 'is_deleted' => 0, 'type' => 2], 'id');
+		$fx_arr = array_rand_value(array_column($fxMajor, 'id'), $fx);
+
+		$pdMajor = $this -> getList(['course_id' => $courseId, 'is_deleted' => 0, 'type' => 3], 'id');
+		$pd_arr = array_rand_value(array_column($pdMajor, 'id'), $pd);
+
+		$return = array_merge($dx_arr, $fx_arr, $pd_arr);
+
+		if(count($return) != ($dx + $fx + $pd)){
+			return false;
+		}
+
+		return $return;
+	}
 }

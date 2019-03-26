@@ -55,7 +55,7 @@ class ExamController extends CommonController
 
         //是否已学习完成
 		//这门课程是否已经被删除
-		$course_info = $this->course->getOne('iid='.$g['course_id'] . ' and is_deleted=0');
+		$course_info = $this->course->getOne('id='.$g['course_id'] . ' and is_deleted=0');
 		if(!$course_info){
 			$this->e('课程不存在或者已经被删除');
 		}
@@ -71,10 +71,10 @@ class ExamController extends CommonController
         $exist = $this->examQuestion->findExamQuestion(['course_id' => $g['course_id'], 'account_id' => $account_id, 'status' => 1]);
 
 		//查询通用课程id
-		$common_course = $this->course->getOne('type=1 and is_deleted=0');
-		if($common_course){
-			$common_course_id = $common_course['id'];
-		}
+//		$common_course = $this->course->getOne('type=1 and is_deleted=0');
+//		if($common_course){
+//			$common_course_id = $common_course['id'];
+//		}
 
 		//将考试信息抽出来
 		$exam_info = $this->exam->getOne('course_id = '. $g['course_id']);
@@ -92,7 +92,7 @@ class ExamController extends CommonController
 			if($not_pass_exam && ($not_pass_exam['exam_question_id'] == $exist['id'])){
 				//重新出题
 				//重新生成题库
-				$questionIds = $this->question->getIds($radioNum, $checkboxNum, $judgeNum, $g['course_id'], $common_course_id);
+				$questionIds = $this->question->getIdsNew($radioNum, $checkboxNum, $judgeNum, $g['course_id']);
 
 				if(!$questionIds){
 					$this->e('考试还未开始');
@@ -119,7 +119,7 @@ class ExamController extends CommonController
 
 				if(!$is_answerd_info){
 					//重新生成题库
-					$questionIds = $this->question->getIds($radioNum, $checkboxNum, $judgeNum, $g['course_id'], $common_course_id);
+					$questionIds = $this->question->getIdsNew($radioNum, $checkboxNum, $judgeNum, $g['course_id']);
 
 					if(!$questionIds){
 						$this->e('考试还未开始');
@@ -178,7 +178,7 @@ class ExamController extends CommonController
         } else {
             //计算需要得出的考试类型题目数量
 			//查询课程对应的exam信
-            $questionIds = $this->question->getIds($radioNum, $checkboxNum, $judgeNum, $g['course_id'], $common_course_id);
+            $questionIds = $this->question->getIdsNew($radioNum, $checkboxNum, $judgeNum, $g['course_id']);
 
 			if(!$questionIds){
 				$this->e('考试还未开始');
