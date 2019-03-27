@@ -59,8 +59,6 @@
                    <tr>
                      <th>课程名称</th>
                      <th>简介</th>
-                     <th>价格</th>
-                     <th>课程类型</th>
                      <th>创建时间</th>
                      <th>操作<th>
                    </tr>
@@ -69,8 +67,6 @@
                  <tr>
                    <td>{$v.name}</td>
                    <td>{$v.detail}</td>
-                   <td>{$v.amount}</td>
-                   <td>{$v['type'] ? '通用课程' : '专业课程'}</td>
                    <td>{$v.created_time|date='Y年m月d日 H时i分',###}</td>
                    <td>
                       <a href="/manage/course/edit?id={$v.id}"><button class="btn btn-success btn-sm">基础编辑</button></a>

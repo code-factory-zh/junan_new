@@ -90,7 +90,7 @@
                     <div class="form-group toggleShow" <if condition="$record.id != '' && $record.type != 1">style="display:none"</if>>
                     <label for="content" class="control-label col-md-3 col-sm-3 col-xs-12">详细内容</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <textarea name="content" id="content" rows="10" class="form-control">{$record.content}</textarea>
+                        <textarea name="content" id="content">{$record.content}</textarea>
                     </div>
             </div>
             <input type="hidden" name="course_id" value="{$course_id}">
@@ -151,7 +151,19 @@
 <script src="/static/build/js/webuploader.min.js"></script>
 <!-- 新增、编辑章节js -->
 <script src="/static/build/js/chapter_add_edit.js"></script>
+
+<script src="/static/build/js/Ueditor/ueditor.config.js"></script>
+<script src="/static/build/js/Ueditor/ueditor.all.min.js"> </script>
+
+<script src="/static/build/js/Ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="/static/build/js/Ueditor/btn_config.js"> </script>
 <script>
+    UE.getEditor('content',{
+        toolbars : btn_file,
+        initialFrameWidth: "100%",
+        initialFrameHeight: "260"
+    });
+
     function formSubmit() {
         $('#form').submit();
     }
