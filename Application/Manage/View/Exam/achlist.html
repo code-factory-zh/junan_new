@@ -56,24 +56,24 @@
               <table class="full_width_table">
                  <thead>
                    <tr>
-                     <th width="100">考生头像</th>
-                     <th width="200">考生姓名</th>
-                     <th width="200">手机号码</th>
-                     <th width="200">身份证号码</th>
-                     <th width="200">入职日期</th>
-                     <!-- <th>岗位</th> -->
-                     <!-- <th>报读课程</th> -->
+                     <th width="130">考生姓名</th>
+                     <th width="200">课程</th>
+                     <th width="200">考试时间</th>
+                     <th width="200">考试时长(分钟)</th>
+                     <th width="200">及格情况</th>
+                     <th width="200">分数</th>
+                     <th width="200">操作</th>
                    </tr>
                  </thead>
                  <foreach name="list" key="k" item="v">
                  <tr>
-                   <td style="text-align:center;padding:10px"><img src="{$v.pic}" width="130" alt=""></td>
-                   <td>{$v.account_name}</td>
-                   <td>{$v.mobile}</td>
-                   <td>{$v.card_num}</td>
-                   <td>{$v.join_date}</td>
-                   <!-- <td>{$v.job_name}</td> -->
-                   <!-- <td>{$v.course_name}</td> -->
+                   <td>{$v.name}</td>
+                   <td>{$v.course_name}</td>
+                   <td>{$v.created_time}</td>
+                   <td>{$v.use_time}</td>
+                   <td>{$v.is_pass_exam}</td>
+                   <td>{$v.score}</td>
+                   <td><a href="">查看</a></td>
                  </tr>
                  </foreach>
                </table>

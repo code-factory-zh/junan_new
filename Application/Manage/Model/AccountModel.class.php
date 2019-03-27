@@ -58,7 +58,7 @@ class AccountModel extends BaseModel {
 	 */
 	public function getAccount($where = []) {
 
-		return $this -> field('a.id account_id, a.name account_name, a.mobile, aj.job_id') ->
+		return $this -> field('a.id account_id, a.name account_name, a.pic, a.join_date, a.card_num, a.mobile, aj.job_id') ->
 		table('account a') -> where($where) ->
 		join('LEFT JOIN account_job aj ON a.id = aj.account_id') ->
 		select();
