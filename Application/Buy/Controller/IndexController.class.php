@@ -9,6 +9,7 @@
 namespace Buy\Controller;
 use Common\Controller\BaseController;
 use Manage\Model\AccountModel;
+use Think\Controller;
 class IndexController extends CommonController{
 
 	private $user;
@@ -22,6 +23,23 @@ class IndexController extends CommonController{
 		$this -> course  = new \Buy\Model\CourseModel;
 		$this -> order   = new \Buy\Model\OrderModel;
 		$this -> account = new \Manage\Model\AccountModel;
+	}
+
+	/**
+	 * 生成二维码
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T19:16:10+0800
+	 */
+	public function fetchCode() {
+
+		$this -> _get($p, ['open_id', 'url']);
+		if (!count($this -> ufo)) {
+			$this -> e('请先登录！');
+		}
+
+		$url = $p['url'] . '?tk=' . $this -> ufo['share_id'];
+		Vendor('phpqrcode.phpqrcode');
+		\QRcode::png($url, false, QR_ECLEVEL_L, 10, 2, false, 0xFFFFFF, 0x000000);
 	}
 
 	/**
@@ -109,6 +127,7 @@ class IndexController extends CommonController{
 		$p['password'] = $this -> _encrypt($p['pwd']);
 		unset($p['pwd'], $p['very_pwd']);
 
+		$p['share_id'] = md5(time());
 		$done = $this -> user -> createCompany($p);
 		if (!$done) {
 			$this -> e('失败！');

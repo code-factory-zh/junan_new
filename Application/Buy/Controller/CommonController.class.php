@@ -22,7 +22,7 @@ class CommonController extends BaseController {
 		$open_id = $this -> requests('open_id');
 		if ($open_id) {
 			$user = new \Buy\Model\UserModel;
-			$this -> ufo = $user -> getCompanyByWhere(['open_id' => $open_id], ['id', 'code', 'company_name', ]);
+			$this -> ufo = $user -> getCompanyByWhere(['open_id' => $open_id], ['id', 'code', 'company_name', 'share_id']);
 		}
 		is_null($this -> ufo) && $this -> ufo = [];
 	}
