@@ -31,4 +31,10 @@ class UserModel extends BaseModel {
 
 		return $this -> add($data);
 	}
+
+	public function select_and_very($data) {
+
+		$find = $this -> where(['code' => $data['code'], 'password' => md5($data['pwd'])]) -> count();
+		return $find;
+	}
 }
