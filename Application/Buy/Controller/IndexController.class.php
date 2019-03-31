@@ -1,8 +1,14 @@
 <?php
 
+/**
+ * 公众号购买课程主页
+ * @Auther QiuXiangCheng
+ * @Date   2019/03/31
+ */
 
 namespace Buy\Controller;
 use Common\Controller\BaseController;
+use Manage\Model\AccountModel;
 class IndexController extends CommonController{
 
 	private $user;
@@ -12,7 +18,39 @@ class IndexController extends CommonController{
 		$this -> ignore_token();
 		parent::_initialize();
 
-		$this -> user = new \Buy\Model\UserModel;
+		$this -> user    = new \Buy\Model\UserModel;
+		$this -> course  = new \Buy\Model\CourseModel;
+		$this -> order   = new \Buy\Model\OrderModel;
+		$this -> account = new \Manage\Model\AccountModel;
+	}
+
+	/**
+	 * 购买课程主页
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T14:41:26+0800
+	 */
+	public function index() {
+
+		$this -> _get($p, ['open_id']);
+
+		if (!count($this -> ufo)) {
+			$this -> e('请先登录！');
+		}
+
+		$data = [
+			'course_list' => [],
+			'history_list' => [],
+			'btn_buy' => '买课',
+			'btn_invitation' => '邀请学员',
+			'user_ttl' => '帐号有效期至：2019年3月31日',
+		];
+
+		$data['course_list'] = $this -> course -> getCourseList(['is_deleted' => 0], 2);
+		$data['history_list']['buy_amount']    = $this -> order -> getTotalOrderAmount($this -> ufo['id']);
+		$data['history_list']['learn_amount']  = $this -> account -> getAccountInfoCount(['company_id' => $this -> ufo['id'], 'status' => 0]);
+		$data['history_list']['examed_amount'] = 0;
+
+		$this -> rel($data) -> e(0);
 	}
 
 	/**

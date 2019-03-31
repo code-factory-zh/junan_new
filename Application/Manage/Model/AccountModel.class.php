@@ -89,4 +89,24 @@ class AccountModel extends BaseModel {
 		where(['c.is_deleted' => 0, 'cac.status' => 0]) ->
 		select();
 	}
+
+	/**
+	 * 取当前企业下考生信息
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T15:29:27+0800
+	 */
+	public function getAccountInfo($where) {
+
+		return $this -> where($where) -> select();
+	}
+
+	/**
+	 * 取当前企业下考生人数
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T15:29:16+0800
+	 */
+	public function getAccountInfoCount($where) {
+
+		return (int)$this -> where($where) -> count();
+	}
 }

@@ -67,4 +67,14 @@ class UserModel extends BaseModel {
 		}
 		return false;
 	}
+
+	/**
+	 * 通过条件取企业数据
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T15:30:43+0800
+	 */
+	public function getCompanyByWhere($where, $fields = '*') {
+
+		return $this -> where($where) -> field($fields) -> find();
+	}
 }
