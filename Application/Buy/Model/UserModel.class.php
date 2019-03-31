@@ -32,9 +32,25 @@ class UserModel extends BaseModel {
 		return $this -> add($data);
 	}
 
-	public function select_and_very($data) {
+	/**
+	 * 验证用户密码
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T12:58:37+0800
+	 */
+	public function login_very($data) {
 
-		$find = $this -> where(['code' => $data['code'], 'password' => md5($data['pwd'])]) -> count();
-		return $find;
+		$user = $this -> where(['code' => $data['code']]) -> find();
+		if (!is_null($user) && count($user)) {
+			if (password_verify($data['pwd'], $user['password'])) {
+				if (empty($user['open_id']) && !empty($data['open_id'])) {
+					return $this -> where(['id' => $user['id']]) -> save(['open_id' => $data['open_id']]);
+				}
+				if (!empty($user['open_id']) && $user['open_id'] != $data['open_id']) {
+					return false;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }

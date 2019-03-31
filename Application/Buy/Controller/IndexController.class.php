@@ -62,13 +62,13 @@ class IndexController extends CommonController{
 		$this -> _post($p, $needle);
 		$this -> lenCheck('pwd', 6);
 		$this -> lenCheck('very_pwd', 6);
-		$this -> lenCheck('code', 5);
+		$this -> lenCheck('code', 6);
 
 		if ($p['pwd'] != $p['very_pwd']) {
 			$this -> e('输入的两次密码不一样！');
 		}
 
-		$p['password'] = sha1($p['pwd']);
+		$p['password'] = $this -> _encrypt($p['pwd']);
 		unset($p['pwd'], $p['very_pwd']);
 
 		$done = $this -> user -> createCompany($p);
@@ -80,23 +80,19 @@ class IndexController extends CommonController{
 	}
 
 	/**
-	 * 注册功能
+	 * 登录功能
 	 * @Author   邱湘城
 	 * @DateTime 2019-03-31T11:54:57+0800
 	 */
 	public function login() {
 
 		$this -> _post($p, ['code' => '帐号', 'pwd' => '密码', 'open_id']);
-du($this -> _encrypt('www'));
 		$this -> lenCheck('code', 6);
 		$this -> lenCheck('pwd', 6);
 
-		$done = $this -> user -> select_and_very($p);
-		du($done);
-	}
-
-	public function index() {
-
-		echo 1;
+		if ($this -> user -> login_very($p)) {
+			$this -> e();
+		}
+		$this -> e('登录失败！');
 	}
 }
