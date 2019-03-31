@@ -95,4 +95,19 @@ class IndexController extends CommonController{
 		}
 		$this -> e('登录失败！');
 	}
+
+	/**
+	 * 通过 open_id 验证当前是否可登录
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T13:27:51+0800
+	 */
+	public function lgcheck() {
+
+		$this -> _get($p, ['open_id']);
+		$find = $this -> user -> userCheck(['open_id' => $p['open_id']]);
+		if (!$find) {
+			$this -> e('登录验证失败，没有发现当前用户登录态！');
+		}
+		$this -> e();
+	}
 }

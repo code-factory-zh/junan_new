@@ -53,4 +53,18 @@ class UserModel extends BaseModel {
 		}
 		return false;
 	}
+
+	/**
+	 * 检查当前用户是否存在
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T14:14:43+0800
+	 */
+	public function userCheck($where) {
+
+		$user = $this -> where($where) -> find();
+		if (count($user)) {
+			return true;
+		}
+		return false;
+	}
 }
