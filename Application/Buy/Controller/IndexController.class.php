@@ -105,7 +105,7 @@ class IndexController extends CommonController{
 		$needle = [
 			'company_name' => '企业名称',
 			'credit_code' => '企业信用代码',
-			'province' => '省',
+			// 'province' => '省',
 			'city' => '城市',
 			'county' => '县',
 			'address' => '详细地址',
