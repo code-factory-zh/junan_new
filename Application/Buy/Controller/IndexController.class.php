@@ -127,7 +127,7 @@ class IndexController extends CommonController{
 		$p['password'] = $this -> _encrypt($p['pwd']);
 		unset($p['pwd'], $p['very_pwd']);
 
-		$p['share_id'] = md5(time());
+		$p['share_id'] = md5(time() . rand(10000, 99999));
 		$done = $this -> user -> createCompany($p);
 		if (!$done) {
 			$this -> e('失败！');
