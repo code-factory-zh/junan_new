@@ -167,4 +167,39 @@ class IndexController extends CommonController{
 		}
 		$this -> e();
 	}
+
+	/**
+	 * 取OPENID
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-03T23:56:58+0800
+	 */
+	public function getOpenId() {
+
+		$this -> _get($p, ['code']);
+
+		$data = $this -> get_open_id($p['code']);
+		if (!isset($data['openid'])) {
+			$this -> e('失败，微信返回 errorcode：' . $data['errcode']);
+		}
+
+		$this -> rel(['open_id' => $data['openid']]) -> e();
+	}
+
+	/**
+	 * 根据code取得openid
+	 * @Author   邱湘城
+	 * @DateTime 2019-01-16T21:40:59+0800
+	 */
+	public function get_open_id($code) {
+
+		$auth = self::getScreat();
+		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$auth[2]}&secret={$auth[3]}&code={$code}&grant_type=authorization_code";
+		return $this -> httpGet($url);
+	}
+
+	private static function getScreat() {
+
+		$fi = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/cert/screat');
+		return explode("\n", trim($fi));
+	}
 }
