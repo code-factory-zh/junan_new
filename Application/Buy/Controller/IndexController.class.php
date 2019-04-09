@@ -211,7 +211,6 @@ class IndexController extends CommonController{
 		$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
 		$data['appid'] = $auth[2];
 		$data['screat'] = $auth[3];
-		pr($auth);
 		$rel = $this -> httpPost($url, $data);
 		if (isset($rel['errcode'])) {
 			$this -> rel($rel) -> e('失败！');
