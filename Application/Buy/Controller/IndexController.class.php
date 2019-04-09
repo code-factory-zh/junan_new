@@ -202,4 +202,15 @@ class IndexController extends CommonController{
 		$fi = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/cert/screat');
 		return explode("\n", trim($fi));
 	}
+
+
+	public function getAccessToken() {
+
+		$auth = self::getScreat();
+		$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$auth[2]}&secret={$auth[3]}";
+		$rel = $this -> httpGet($url);
+		if (isset($rel['errcode'])) {
+			$this -> rel($rel) -> e('失败！');
+		}
+	}
 }
