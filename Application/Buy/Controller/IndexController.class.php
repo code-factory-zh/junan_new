@@ -207,9 +207,7 @@ class IndexController extends CommonController{
 	public function getAccessToken() {
 
 		$auth = self::getScreat();
-
-		pr($auth, false);
-		$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$auth[2]}&appsecret={$auth[3]}";
+		$url = "https://api.weixin.qq.com/cgi-bin/token?appid={$auth[2]}&secret={$auth[3]}&grant_type=client_credential";
 		$rel = $this -> httpGet($url);
 		if (isset($rel['errcode'])) {
 			$this -> rel($rel) -> e('失败！');
