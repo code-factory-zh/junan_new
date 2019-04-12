@@ -19,10 +19,11 @@ class IndexController extends CommonController{
 		$this -> ignore_token();
 		parent::_initialize();
 
-		$this -> user    = new \Buy\Model\UserModel;
-		$this -> course  = new \Buy\Model\CourseModel;
-		$this -> order   = new \Buy\Model\OrderModel;
-		$this -> account = new \Manage\Model\AccountModel;
+		$this -> user     = new \Buy\Model\UserModel;
+		$this -> course   = new \Buy\Model\CourseModel;
+		$this -> order    = new \Buy\Model\OrderModel;
+		$this -> account  = new \Manage\Model\AccountModel;
+		$this -> discount = new \Manage\Model\DiscountModel;
 	}
 
 	/**
@@ -40,6 +41,51 @@ class IndexController extends CommonController{
 		$url = $p['url'] . '?tk=' . $this -> ufo['share_id'];
 		Vendor('phpqrcode.phpqrcode');
 		\QRcode::png($url, false, QR_ECLEVEL_L, 10, 2, false, 0xFFFFFF, 0x000000);
+	}
+
+	/**
+	 * 买课确认页获取相关的课程价格
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-13T01:31:19+0800
+	 */
+	public function comfirmOrder() {
+
+		$rel = [
+			'title' => '我要买课',
+			'banner' => [
+				'tips'  => '课程价格',
+				'price' => 100,
+				'unit'  => 'RMB',
+				'spec'  => 'RMB/人',
+			],
+			'bottom_tips' => [
+				'tips' => '温馨提示：',
+				'spec' => [],
+				'desc' => '',
+			],
+			'btn' => '购买',
+		];
+
+		$course = $this -> course -> getCourseList(['is_deleted' => 0], 2);
+		if (is_null($course) || !count($course)) {
+			$this -> e('没有课程信息！');
+		}
+
+		$prices = array_column($course, 'price');
+		$rel['banner']['price'] = array_sum($prices);
+
+		// 优惠信息
+		$discount = $this -> discount -> getList();
+		if (count($discount)) {
+			foreach ($discount as $items) {
+				$dc = $items['discount'] * 10;
+				$msg = "购买{$items['discount_min_num']}-{$items['discount_max_num']}份{$dc}折！";
+				$rel['bottom_tips']['desc'] .= "<p>{$msg}</p>";
+				$rel['bottom_tips']['spec'][] = $msg;
+			}
+		}
+
+		$this -> rel($rel) -> e();
 	}
 
 	/**
