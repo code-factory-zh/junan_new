@@ -25,7 +25,7 @@ class CourseModel extends BaseModel {
 	 */
 	public function getCourseList($where, $type = 1) {
 
-		$this -> where($where) -> field('id,name,detail');
+		$this -> where($where) -> field('id,name,detail,price');
 		if ($type == 1) {
 			return $this -> find();
 		}
