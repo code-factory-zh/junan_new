@@ -45,7 +45,7 @@ class OrderController extends CommonController{
 			$this -> e('请先登录！');
 		}
 
-		$this -> _get($p, ['pay_type' => '支付方式', 'count' => '请输入课程数量', 'unit_price' => '请输入课程单价', 'total_price' => '请输入课程总价']);
+		$this -> _get($p, ['open_id', 'pay_type' => '支付方式', 'count' => '请输入课程数量', 'unit_price' => '请输入课程单价', 'total_price' => '请输入课程总价']);
 		$this -> isInt(['count', 'unit_price', 'total_price']);
 
 		if ($p['count'] * $p['unit_price'] != $p['total_price']) {
@@ -83,11 +83,12 @@ class OrderController extends CommonController{
 			vendor('Wxpay.lib.WxPayApi');
 
 			$tools = new \JsApiPay();
-			$openId = $tools -> GetOpenid();
+			$openId = $p['open_id'];
 
-			if (is_null($openId)) {
-				$this -> e('获取必要参数失败，请确保code未被重复使用！');
-			}
+			// $openId = $tools -> GetOpenid();
+			// if (is_null($openId)) {
+				// $this -> e('获取必要参数失败，请确保code未被重复使用！');
+			// }
 
 			$input = new \WxPayUnifiedOrder();
 			$input -> SetBody("购买课程");
