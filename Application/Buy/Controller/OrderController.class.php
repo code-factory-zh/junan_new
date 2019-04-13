@@ -121,9 +121,9 @@ class OrderController extends CommonController{
 			$input -> SetGoods_tag("购买课程");
 			$input -> SetAttach("公司统一购买课程");
 			$input -> SetOut_trade_no($data['order_num']);
-			$input -> SetTotal_fee($p['total_price']);
-			$input -> SetTime_start(date("YmdHis"));
-			$input -> SetTime_expire(date("YmdHis", time() + 600));
+			$input -> SetTotal_fee($p['total_price'] * 100);
+			$input -> SetTime_start(date("YmdHis", $time));
+			$input -> SetTime_expire(date("YmdHis", $time + 600));
 			$input -> SetNotify_url("http://wxpay.joinersafe.com/manage/pay/setpay");
 			$input -> SetTrade_type("JSAPI");
 			$input -> SetOpenid($openId);
@@ -139,12 +139,75 @@ class OrderController extends CommonController{
 			$jsApiParameters = $tools -> GetJsApiParameters($order);
 			$jsApiParameters = json_decode($jsApiParameters, true);
 
+			$getTicketInfo = $this -> getJsapiTicket($p['open_id']);
+			if (!isset($getTicketInfo)) {
+				$this -> e('获取 jsapi_ticket 失败');
+			}
+
+			$signs = [
+				'jsapi_ticket' => $getTicketInfo,
+				'noncestr' => $jsApiParameters['nonceStr'],
+				'timestamp' => $jsApiParameters['timeStamp'],
+				'url' => str_replace('amp;', '', urldecode($p['url'])),
+				// 'url' => $p['url'],
+			];
+
+			$sign_str = '';
+			foreach ($signs as $k => $items) {
+				if ($k != 'sign') {
+					$sign_str .= $k .= '=' . $items . '&';
+				}
+			}
+			// pr($signs);
+
+			$sign_str = trim($sign_str, '&');
+			$jsApiParameters['signature'] = sha1($sign_str);
+
 			// $editAddress = $tools -> GetEditAddressParameters();
-			// pr($jsApiParameters);
 
 			$rel['wx'] = $jsApiParameters;
 		}
 
 		$this -> rel($rel) -> e();
+	}
+
+	// 取jsapi_ticket
+	public function getJsapiTicket($open_id) {
+
+		$data = M() -> table('user_wx') -> where(['openid' => $open_id]) -> find();
+		if (!is_null($data) && count($data)) {
+			return $data['jsapi_ticket'];
+		}
+
+		$rel = $this -> getAccessTokens();
+		if (!isset($rel['access_token'])) {
+			$this -> e('获取access_token失败');
+		}
+
+		$url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$rel['access_token']}&type=jsapi";
+		$ret = $this -> httpGet($url);
+
+		$insert = [
+			'openid' => $open_id,
+			'access_token' => $rel['access_token'],
+			'jsapi_ticket' => $ret['ticket'],
+		];
+		M() -> table('user_wx') -> add($insert);
+
+		return $ret['ticket'];
+	}
+
+	// 取 access_token
+	public function getAccessTokens() {
+
+		$auth = self::getScreat();
+		$url = "https://api.weixin.qq.com/cgi-bin/token?appid={$auth[2]}&secret={$auth[3]}&grant_type=client_credential";
+		return $this -> httpGet($url);
+	}
+
+	private static function getScreat() {
+
+		$fi = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/cert/screat');
+		return explode("\n", trim($fi));
 	}
 }
