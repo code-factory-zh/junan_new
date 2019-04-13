@@ -8,3 +8,4 @@ Application/Runtime/*
 vendor/
 composer.lock
 Application/Manage/Conf/config.php
+Public/static/wx
