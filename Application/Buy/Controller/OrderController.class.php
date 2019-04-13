@@ -34,6 +34,32 @@ class OrderController extends CommonController{
 	    }
 	}
 
+	public function getInfo() {
+
+		$data = [
+			'tips' => '联系运营人员进行转帐',
+			'list' => [
+				[
+					'name'  => '帐户名',
+					'value' => '李xxx',
+				],
+				[
+					'name'  => '开户行',
+					'value' => '中山市xxxxx',
+				],
+				[
+					'name'  => '银行帐号',
+					'value' => '6214xxxxxxxxxxxx',
+				],
+				[
+					'name'  => '电话',
+					'value' => '0774-00000',
+				],
+			],
+		];
+		$this -> rel($data) -> e();
+	}
+
 	/**
 	 * 生成订单
 	 * @Author   邱湘城
