@@ -58,7 +58,7 @@ class QuestionsModel extends BaseModel {
      * @param int $pd
      * @param int $courseId
      * @param int $common_course_id 通用课程id
-     * return array
+     * @return array
      * **/
     public function getIds($dx, $fx, $pd, $courseId, $common_course_id)
     {
@@ -138,7 +138,7 @@ class QuestionsModel extends BaseModel {
 	 * @param int $fx
 	 * @param int $pd
 	 * @param int $courseId
-	 * return array
+	 * @return array
 	 * **/
 	public function getIdsNew($dx, $fx, $pd, $courseId)
 	{
@@ -158,5 +158,23 @@ class QuestionsModel extends BaseModel {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * 获取成绩单中答题的详细信息
+	 * @author cuirj
+	 * @date   2019/4/15 下午10:19
+	 *
+	 * @param  int param
+	 * @return  array
+	 */
+	public function get_question_detail($ids, $account_id, $exam_question_id){
+		$result = $this->alias('q')
+			->field('q.type, q.title, q.option, q.answer, m.answer_id, m.status, m.score')
+			->where("q.id in ($ids) and m.account_id = $account_id and m.exam_question_id=$exam_question_id")
+			->join('exam_detail as m on q.id = m.question_id', 'left')
+			->select();
+
+		return $result;
 	}
 }

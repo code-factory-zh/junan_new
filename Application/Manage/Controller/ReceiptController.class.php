@@ -50,7 +50,7 @@ class ReceiptController extends CommonController {
 	 * 编辑收款账号
 	 * @author cuiruijun
 	 * @date   2018/12/10 下午11:59
-	 * @url    manage/job/edit
+	 * @url    manage/receipt/edit
 	 * @return  array
 	 */
 	public function edit(){
@@ -59,6 +59,6 @@ class ReceiptController extends CommonController {
 
 		$data['list'] = $jobs;
 		$this->assign($data);
-		$this->display();
+		$this->display('receipt/edit');
 	}
 }

@@ -87,14 +87,14 @@
                                     <foreach name="record.option" key="k" item="value">
                                         <div class="every_answers">
                                             <input type="radio" name="which" <if condition="$record.answer == $k+1">checked</if> value="{$k+1}">
-                                            <input type="text" name="answer{$k+1}" value="{$value}" class="form-control" placeholder="请输入答案">
+                                            {$answer_key_num[$k+1]}:<input type="text" name="answer{$k+1}" value="{$value}" class="form-control" placeholder="请输入答案">
                                             <span class="glyphicon glyphicon-trash" onclick="del_answer({$k+1})"></span>
                                         </div>
                                     </foreach>
                                 <else/>
                                     <div class="every_answers">
                                         <input type="radio" name="which" checked value="1">
-                                        <input type="text" name="answer1" class="form-control" placeholder="请输入答案">
+                                        {$answer_key_num[1]}:<input type="text" name="answer1" class="form-control" placeholder="请输入答案">
                                         <span class="glyphicon glyphicon-trash" onclick="del_answer(1)"></span>
                                     </div>
                                 </if>
@@ -114,14 +114,14 @@
                                     <foreach name="record.option" key="k" item="value">
                                         <div class="every_answers">
                                             <input type="checkbox" name="which" <if condition="$value.answer == 2">checked</if> value="{$k+1}">
-                                            <input type="text" name="answer{$k+1}" value="{$value.value}" class="form-control" placeholder="请输入答案">
+                                            {$answer_key_num[$k+1]}:<input type="text" name="answer{$k+1}" value="{$value.value}" class="form-control" placeholder="请输入答案">
                                             <span class="glyphicon glyphicon-trash" onclick="del_answer({$k+1})"></span>
                                         </div>
                                     </foreach>
                                     <else/>
                                     <div class="every_answers">
                                         <input type="checkbox" name="which" checked value="1">
-                                        <input type="text" name="answer1" class="form-control" placeholder="请输入答案">
+                                        {$answer_key_num[1]}:<input type="text" name="answer1" class="form-control" placeholder="请输入答案">
                                         <span class="glyphicon glyphicon-trash" onclick="del_answer(1)"></span>
                                     </div>
                                 </if>
