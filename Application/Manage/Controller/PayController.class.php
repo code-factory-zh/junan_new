@@ -80,9 +80,12 @@ class PayController extends CommonController {
             $sign = strtoupper($sign);
 
             if ($sign === $xmlSign) {
+            	M('tmp') -> add(['str' => $sign . ' ' . $xmlSign]);
                 $trade_no = $xmlObj['out_trade_no']; // 总订单号
             	M('order') -> where(['order_num' => $trade_no]) -> save(['status' => 1, 'updated_time' => time()]);
                 $this -> callback_ok();
+            } else {
+            	M('tmp') -> add(['str' => 'no']);
             }
 		}
 	}
