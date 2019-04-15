@@ -12,9 +12,9 @@ use Common\Controller\BaseController;
 
 class CompanyController extends CommonController
 {
-
-
+    private $job;
     private $company;
+    private $account;
 
     // 不需要验证TOKEN
     protected static $token = 0;
@@ -25,6 +25,8 @@ class CompanyController extends CommonController
         parent::_initialize();
         $this->islogin();
         $this->company = new \Manage\Model\CompanyModel;
+		$this->job = new \Manage\Model\JobModel;
+		$this->account = new \Manage\Model\AccountModel;
     }
 
 
@@ -145,6 +147,52 @@ class CompanyController extends CommonController
         $companyList = $this->company->searchCompany(['company_name' => $post['company_name']]);
         $this->rel(['company_list' => $companyList])->e();
     }
+
+	/**
+	 * 考生列表
+	 * @author cuirj
+	 * @date   2019/4/16 上午2:06
+	 * @method get
+	 *
+	 * @param  int param
+	 * @return  array
+	 */
+    public function account_list(){
+    	$company_id = I('get.company_id');
+		$data = [];
+//		$jobs = $this -> job -> getJobs('id, name');
+		$list = $this -> account -> getAccount(['a.company_id' => $company_id]);
+
+		$cour = [];
+		$courses = $this -> account -> getCourses();
+		if (count($courses)) {
+			foreach ($courses as $k => $v) {
+				if (!isset($cour[$v['account_id']])){
+					$cour[$v['account_id']] = $v['course_name'];
+				} else {
+					$cour[$v['account_id']] .= '，' . $v['course_name'];
+				}
+			}
+		}
+
+		if (count($list)) {
+			foreach ($list as &$items) {
+				$items['course_name'] = '-';
+				$items['job_name'] = '-';
+				if (isset($jobs[$items['job_id']])) {
+					$items['job_name'] = $jobs[$items['job_id']];
+				}
+				if (isset($cour[$items['account_id']])) {
+					$items['course_name'] = $cour[$items['account_id']];
+				}
+				!empty($items['join_date']) && $items['join_date'] = date('Y-m-d', $items['join_date']);
+			}
+		}
+
+		$data['list'] = $list;
+		$this -> assign($data);
+		$this -> display('Account/list');
+	}
 
     /**
      * 用户登录
