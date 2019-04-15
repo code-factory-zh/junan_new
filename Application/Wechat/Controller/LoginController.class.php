@@ -9,6 +9,7 @@
 namespace Wechat\Controller;
 use Manage\Model\AccountModel;
 use Wechat\Model\UserModel;
+use Wechat\Model\CompanyModel;
 class LoginController extends CommonController {
 
 	private $user;
@@ -23,6 +24,55 @@ class LoginController extends CommonController {
 		parent::_initialize();
 		$this -> account = new \Manage\Model\AccountModel;
 		$this -> user = new \Wechat\Model\UserModel;
+		$this -> company = new \Wechat\Model\CompanyModel;
+	}
+
+	/**
+	 * 考生登录接口
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-02T23:56:12+0800
+	 */
+	public function login_new() {
+
+		$this -> ignore_token();
+		$this -> _post($p, ['uname' => '请填写姓名', 'open_id', 'card_num' => '请填写身份证号', 'mobile' => '请填写手机号', 'tk' => '请填写邀请码']);
+		$this -> phoneCheck($p['mobile']);
+
+		if (!is_numeric($p['card_num']) || strlen($p['card_num']) < 18) {
+			$this -> e('身份证号不合法！');
+		}
+
+		if (strlen($p['tk']) != 32) {
+			$this -> e('邀请码不合法！');
+		}
+
+		if (mb_strlen($p['uname'], 'utf-8') < 2) {
+			$this -> e('您输入的名字太短！');
+		}
+
+		// 检查当前的邀请码是否可用
+		$err = $this -> company -> checkShardId($p);
+		if (!$err['id']) {
+			$this -> e($err['err']);
+		}
+
+		$time = time();
+        $data = [
+            'company_id' => $err['id'],
+            'open_id' => $p['open_id'],
+            'name' => $p['uname'],
+            'mobile' => $p['mobile'],
+            'created_time' => $time,
+            'updated_time' => $time,
+            'card_num' => $p['card_num'],
+            'join_date' => isset($p['join_date']) ? strtotime($p['join_date']) : 0,
+        ];
+
+		$done = M('account') -> data($data) -> add();
+		if (!$done) {
+			$this -> e('注册失败！');
+		}
+		$this -> e();
 	}
 
 

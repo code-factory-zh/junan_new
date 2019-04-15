@@ -199,4 +199,27 @@ class ExamController extends CommonController {
 			}
 		}
 	}
+
+
+
+	/**
+	 * 2019/03/27
+	 * 考生成绩管理
+	 */
+	public function ach() {
+
+		$where = ['em.company_id' => $this -> userinfo['id'], 'em.is_deleted' => 0];
+		$list = $this -> exam_member -> getExamAchList($where, 'a.name, c.name course_name, em.*');
+
+		if (count($list)) {
+			foreach ($list as &$items) {
+				$items['created_time'] = date('Y-m-d H:i:s', $items['created_time']);
+				$items['is_pass_exam'] = $items['is_pass_exam'] == 1 ? '及格' : '未及格';
+				$items['use_time'] = intval($items['use_time'] / 60) . ':' . ($items['use_time'] % 60);
+			}
+		}
+
+		$this -> assign('list', $list);
+		$this -> display('Exam/achlist');
+	}
 }

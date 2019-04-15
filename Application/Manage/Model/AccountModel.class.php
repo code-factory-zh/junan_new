@@ -58,7 +58,7 @@ class AccountModel extends BaseModel {
 	 */
 	public function getAccount($where = []) {
 
-		return $this -> field('a.id account_id, a.name account_name, a.mobile, aj.job_id') ->
+		return $this -> field('a.id account_id, a.name account_name, a.pic, a.join_date, a.card_num, a.mobile, aj.job_id') ->
 		table('account a') -> where($where) ->
 		join('LEFT JOIN account_job aj ON a.id = aj.account_id') ->
 		select();
@@ -88,5 +88,25 @@ class AccountModel extends BaseModel {
 		join('left join course c on cac.course_id = c.id') ->
 		where(['c.is_deleted' => 0, 'cac.status' => 0]) ->
 		select();
+	}
+
+	/**
+	 * 取当前企业下考生信息
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T15:29:27+0800
+	 */
+	public function getAccountInfo($where) {
+
+		return $this -> where($where) -> select();
+	}
+
+	/**
+	 * 取当前企业下考生人数
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T15:29:16+0800
+	 */
+	public function getAccountInfoCount($where) {
+
+		return (int)$this -> where($where) -> count();
 	}
 }

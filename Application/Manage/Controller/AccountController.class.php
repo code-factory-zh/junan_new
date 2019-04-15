@@ -54,6 +54,7 @@ class AccountController extends CommonController {
 				if (isset($cour[$items['account_id']])) {
 					$items['course_name'] = $cour[$items['account_id']];
 				}
+				!empty($items['join_date']) && $items['join_date'] = date('Y-m-d', $items['join_date']);
 			}
 		}
 

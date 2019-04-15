@@ -52,22 +52,28 @@
         <!-- 页面内容 -->
         <div class="right_col" role="main">
           <div id="course_list">
-              <a href="/manage/account/edit"><button class="btn btn-success btn-sm fr" id="add_course">新增子帐号</button></a>
+              <!-- <a href="/manage/account/edit"><button class="btn btn-success btn-sm fr" id="add_course">新增子帐号</button></a> -->
               <table class="full_width_table">
                  <thead>
                    <tr>
-                     <th>帐号名称</th>
-                     <th>手机</th>
-                     <th>岗位</th>
-                     <th>报读课程</th>
+                     <th width="100">考生头像</th>
+                     <th width="200">考生姓名</th>
+                     <th width="200">手机号码</th>
+                     <th width="200">身份证号码</th>
+                     <th width="200">入职日期</th>
+                     <!-- <th>岗位</th> -->
+                     <!-- <th>报读课程</th> -->
                    </tr>
                  </thead>
                  <foreach name="list" key="k" item="v">
                  <tr>
+                   <td style="text-align:center;padding:10px"><img src="{$v.pic}" width="130" alt=""></td>
                    <td>{$v.account_name}</td>
                    <td>{$v.mobile}</td>
-                   <td>{$v.job_name}</td>
-                   <td>{$v.course_name}</td>
+                   <td>{$v.card_num}</td>
+                   <td>{$v.join_date}</td>
+                   <!-- <td>{$v.job_name}</td> -->
+                   <!-- <td>{$v.course_name}</td> -->
                  </tr>
                  </foreach>
                </table>
