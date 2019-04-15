@@ -90,9 +90,28 @@ class OrderController extends CommonController{
 			'count' => $p['count'],
 		];
 
-		$done = $this -> order -> add($data);
-		if (!$done) {
+		$order_id = $this -> order -> add($data);
+		if (!$order_id) {
 			$this -> e('创建订单失败，请重试！');
+		}
+
+		$course = $this -> course -> getCourseList(['is_deleted' => 0], 2);
+		if (!count($course)) {
+			$this -> e('找不到订单所需数据！');
+		}
+
+		// 保存订单详情
+		$orderDetail = [
+			'company_id' => $this -> ufo['id'],
+			'order_id' => $order_id,
+			'created_time' => $time,
+			'updated_time' => $time,
+		];
+
+		$course_id = array_column($course, 'price', 'id');
+		foreach ($course_id as $courseId => $price) {
+			$orderDetail['course_id'] = $courseId;
+			M('order_detail') -> add($orderDetail);
 		}
 
 		// 收集需返回的数据
@@ -124,7 +143,7 @@ class OrderController extends CommonController{
 			$input -> SetTotal_fee($p['total_price'] * 100);
 			$input -> SetTime_start(date("YmdHis", $time));
 			$input -> SetTime_expire(date("YmdHis", $time + 600));
-			$input -> SetNotify_url("http://wxpay.joinersafe.com/manage/pay/setpay");
+			$input -> SetNotify_url("http://wxpay.joinersafe.com/manage/pay/finishedWxPay");
 			$input -> SetTrade_type("JSAPI");
 			$input -> SetOpenid($openId);
 			$input -> SetSignType("MD5");
@@ -149,7 +168,6 @@ class OrderController extends CommonController{
 				'noncestr' => $jsApiParameters['nonceStr'],
 				'timestamp' => $jsApiParameters['timeStamp'],
 				'url' => str_replace('amp;', '', urldecode($p['url'])),
-				// 'url' => $p['url'],
 			];
 
 			$sign_str = '';
@@ -158,12 +176,9 @@ class OrderController extends CommonController{
 					$sign_str .= $k .= '=' . $items . '&';
 				}
 			}
-			// pr($signs);
 
 			$sign_str = trim($sign_str, '&');
 			$jsApiParameters['signature'] = sha1($sign_str);
-
-			// $editAddress = $tools -> GetEditAddressParameters();
 
 			$rel['wx'] = $jsApiParameters;
 		}

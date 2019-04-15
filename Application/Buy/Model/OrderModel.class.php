@@ -49,4 +49,24 @@ class OrderModel extends BaseModel {
 		}
 		return is_null($data[0]['c']) ? 0 : intval($data[0]['c']);
 	}
+
+	/**
+	 * 保存订单详情
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-16T00:56:40+0800
+	 */
+	public function saveOrderDetail($orderInfo) {
+
+		return $this -> table('order_detail') -> add($orderInfo);
+	}
+
+	/**
+	 * 根据用户订单号发送一个
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-15T23:57:32+0800
+	 */
+	public function sendGoodsToUserFromOrderSn($orderSN) {
+
+
+	}
 }
