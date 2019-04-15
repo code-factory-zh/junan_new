@@ -52,6 +52,17 @@
 
         <!-- 页面内容 -->
         <div class="right_col" role="main">
+            <div class="dropdown">
+                <input type="text" value="{$cond.address}" id='address_s' name="address_s" placeholder="请输入要查询的地址">
+                <select id="type_s" name="course_id">
+                    <option value="">请选择行业类型</option>
+                    <foreach name="industry" key="i_k" item="i_v">
+                        <option value="{$i_k}" <if condition="$cond.type == $i_k">selected</if>>{$i_v}</option>
+                    </foreach>
+                </select>
+                <button class="btn btn-success btn-sm dropdown-toggle search" data-toggle="dropdown" id="search">查询</button>
+            </div>
+
           <div id="course_list">
               <a href="/manage/receipt/edit"><button class="btn btn-success btn-sm fr">收款账户设置</button></a>
               <table class="full_width_table">
@@ -59,7 +70,11 @@
                    <tr>
                      <th>接入公司</th>
                      <th>账号</th>
+                     <th>企业信用代码</th>
+                     <th>行业类型</th>
+                     <th>地址</th>
                      <th>创建时间</th>
+                     <th>到期时间</th>
                      <th>操作</th>
                    </tr>
                  </thead>
@@ -67,7 +82,11 @@
                  <tr>
                    <td>{$v.company_name}</td>
                    <td>{$v.code}</td>
+                   <td>{$v.credit_code}</td>
+                   <td>{$industry[$v["industry"]]}</td>
+                   <td>{$v.province}{$v.city}{$v.address}</td>
                    <td>{$v.created_time|date='Y年m月d日 H时i分',###}</td>
+                   <td>{$v.active_time|date='Y年m月d日 H时i分',###}</td>
                    <td>
                      <if condition="$v.status eq 1">
                       <button class="btn btn-success btn-sm change_status" value="0" idvalue="{$v.id}">激活</button>
@@ -75,7 +94,7 @@
                       <button class="btn btn-danger btn-sm change_status" value="1" idvalue="{$v.id}">禁用</button>
                          <button class="btn btn-success btn-sm" idvalue="{$v.id}">考生列表</button>
 
-                         <button class="btn btn-success btn-sm" idvalue="{$v.id}">有效期设置</button>
+                         <a href="/manage/company/active_time/?id={$v.id}"><button class="btn btn-success btn-sm">有效期设置</button>
                        </if>
                    </td>
                  </tr>
@@ -125,6 +144,27 @@
           }
         })
         return false
+      })
+
+      $("#search").click(function () {
+          address = $('#address_s').val();
+          type = $('#type_s').val();
+
+          window.location.href = '/manage/company/?address='+address+'&type='+type;
+//          $.ajax({
+//              url: '/manage/company/index/',
+//              type: 'get',
+//              dataType: 'JSON',
+//              data: {"status":status, "id":id},
+//              success: function (e) {
+//                  if (e.code != 0) {
+//                      alert(e.msg)
+//                  } else {
+//                      window.location.href = '/manage/company';
+//                  }
+//              }
+//          })
+//          return false
       })
     </script>
   </body>

@@ -39,7 +39,36 @@ class CompanyController extends CommonController
      */
     public function index()
     {
-        $companys = $this->company->getCompanys('id,code,company_name,created_time,status');
+    	$params = I('get.');
+		$where = '1=1';
+		$industry = $params['type'];
+		$address = $params['address'];
+
+		if($industry){
+			$where .= ' and industry='.$industry;
+		}
+
+		if($address){
+			$where .= ' and address="' . $address . '"';
+		}
+        $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time');
+
+		//取行业类型
+		$data['industry'] = [
+			1 => '冶金行业',
+			2 => '有色行业',
+			3 => '建材行业',
+			4 => '机械行业',
+			5 => '轻工行业',
+			6 => '纺织行业',
+			7 => '烟草行业',
+		];
+
+		$data['cond'] = [
+			'type' => $industry,
+			'address' => $address,
+			'current_time' => time()
+		];
 
         $data['list'] = $companys;
         $this->assign($data);
@@ -68,6 +97,46 @@ class CompanyController extends CommonController
             $this->el($result, '修改失败,请重试');
         }
     }
+
+	/**
+	 * 账户有效期设置页面
+	 * @author cuirj
+	 * @date   2019/4/16 上午1:26
+	 *
+	 * @param  int id
+	 * @return  array
+	 */
+	public function active_time()
+	{
+		//判断当前传的参数和数据库中是否相同,如果相同则报错
+		$where['id'] = I('get.id');
+		$result = $this->company->getOne($where);
+
+		$data['list'] = $result;
+		$this->assign($data);
+		$this->display();
+	}
+
+	/**
+	 * 账户有效期设置页面
+	 * @author cuirj
+	 * @date   2019/4/16 上午1:26
+	 *
+	 * @param  int id
+	 * @return  array
+	 */
+	public function active_time_ajax()
+	{
+		$data = I('post.');
+		$data['active_time'] = strtotime($data['active_time']);
+
+		//修改
+		if($result = $this->company->save($data)){
+			$this->e();
+		}else{
+			$this->e('修改失败');
+		}
+	}
 
     public function search()
     {
