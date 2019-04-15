@@ -92,9 +92,9 @@
                       <button class="btn btn-success btn-sm change_status" value="0" idvalue="{$v.id}">激活</button>
                        <else/>
                       <button class="btn btn-danger btn-sm change_status" value="1" idvalue="{$v.id}">禁用</button>
-                         <button class="btn btn-success btn-sm" idvalue="{$v.id}">考生列表</button>
+                         <a href="/manage/company/account_list/?company_id={$v.id}"><button class="btn btn-success btn-sm" idvalue="{$v.id}">考生列表</button></a>
 
-                         <a href="/manage/company/active_time/?id={$v.id}"><button class="btn btn-success btn-sm">有效期设置</button>
+                         <a href="/manage/company/active_time/?id={$v.id}"><button class="btn btn-success btn-sm">有效期设置</button></a>
                        </if>
                    </td>
                  </tr>
