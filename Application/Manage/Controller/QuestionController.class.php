@@ -54,13 +54,55 @@ class QuestionController extends CommonController
 
 		$list = $this->question->getAll('*', 'is_deleted = 0', $params['page'], $params['pageNum']);
 
+		//将1,2,3,4转成ABCD
+		//增加选项的匹配
+		$answer_key_num = [
+			1 => 'A',
+			2 => 'B',
+			3 => 'C',
+			4 => 'D',
+			5 => 'E',
+			6 => 'F',
+			7 => 'G',
+		];
+
+		//判断题只有两项
+		$answer_judge_key_num = [
+			1 => '正确',
+			2 => '错误',
+		];
+
 		$courseList = $this->course->getList();
 		$array = array_column($courseList, 'name', 'id');
 		foreach ($list as &$val)
 		{
 			$val['course_id'] = $array[$val['course_id']];
 			$option = json_decode($val['option'], true);
-			$val['option'] = implode('|', $option);
+//			$val['option'] = implode('|', $option);
+
+			if($val['type'] == 2){
+				$answer = json_decode($val['answer'], true);
+				$answer_tmp = [];
+				foreach($answer as $a_k => $a_v){
+					$answer_tmp[] = $answer_key_num[$a_v];
+				}
+
+				$val['answer'] = implode('', $answer_tmp);
+
+			}elseif($val['type'] == 3){
+				$val['answer'] = $answer_judge_key_num[$val['answer']];
+			}
+
+			if(in_array($val['type'], [1,2])){
+				$option_tmp = [];
+				foreach($option as $o_k => $o_v){
+					$option_tmp[] = $answer_key_num[$o_k+1] . ':' . $o_v;
+				}
+
+				$val['option'] = implode('|', $option_tmp);
+			}else{
+				$val['option'] = implode('|', $option);
+			}
 		}
 
 		$this->assign(['data' => $list]);
@@ -268,6 +310,30 @@ class QuestionController extends CommonController
 		$this->display('Question/import');
 	}
 
+	public function download()
+	{
+		$file_path = $_SERVER['DOCUMENT_ROOT']."download/demo.xlsx";
+
+		$file_name = "demo.xlsx";
+
+		$fp=fopen($file_path,"r");
+		$file_size=filesize($file_path);
+		//下载文件需要用到的头
+		Header("Content-type: application/octet-stream");
+		Header("Accept-Ranges: bytes");
+		Header("Accept-Length:".$file_size);
+		Header("Content-Disposition: attachment; filename=".$file_name);
+		$buffer=1024;
+		$file_count=0;
+		//向浏览器返回数据
+		while(!feof($fp) && $file_count<$file_size){
+			$file_con=fread($fp,$buffer);
+			$file_count+=$buffer;
+			echo $file_con;
+		}
+		fclose($fp);
+	}
+
 	/**
 	 * 导入题库
 	 * @author cuiruijun
@@ -285,11 +351,11 @@ class QuestionController extends CommonController
 		Vendor('PHPExcel.Classes.PHPExcel.IOFactory');
 		Vendor('PHPExcel.Classes.PHPExcel.Reader.Excel5');
 
-		$course_id = I('post.course_id');
-		if (!$course_id)
-		{
-			$this->e('请选择课程');
-		}
+//		$course_id = I('post.course_id');
+//		if (!$course_id)
+//		{
+//			$this->e('请选择课程');
+//		}
 
 		$question_type = [
 			'单选题' => 1,
