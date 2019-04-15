@@ -52,6 +52,40 @@ class PayController extends CommonController {
 		}
 	}
 
+	/**
+	 * 第二版微信回调
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-15T23:52:58+0800
+	 */
+	public function finishedWxPay() {
+
+		vendor('Wxpay.example.WxPayConfig');
+		$config = new \WxPayConfig();
+
+		$notifiedData = file_get_contents('php://input');
+		$xmlObj = simplexml_load_string($notifiedData, 'SimpleXMLElement', LIBXML_NOCDATA);
+		M('tmp') -> add(['str' => json_encode($xmlObj)]);
+
+        $xmlObj = json_decode(json_encode($xmlObj), true);
+		if ($xmlObj['return_code'] == "SUCCESS" && $xmlObj['result_code'] == "SUCCESS") {
+			foreach($xmlObj as $k => $v) {
+				if($k == 'sign') {
+					$xmlSign = $xmlObj[$k];
+					unset($xmlObj[$k]);
+				};
+			}
+
+			$sign = http_build_query($xmlObj);
+            $sign = md5($sign . '&key=' . $config -> GetKey());
+            $sign = strtoupper($sign);
+
+            if ($sign === $xmlSign) {
+                $trade_no = $xmlObj['out_trade_no']; // 总订单号
+            	M('order') -> where(['order_num' => $trade_no]) -> save(['status' => 1, 'updated_time' => time()]);
+                $this -> callback_ok();
+            }
+		}
+	}
 
 	/**
 	 * 回调微信  完成
