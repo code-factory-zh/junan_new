@@ -91,6 +91,8 @@ class QuestionController extends CommonController
 
 			}elseif($val['type'] == 3){
 				$val['answer'] = $answer_judge_key_num[$val['answer']];
+			}else{
+				$val['answer'] = $answer_key_num[$val['answer']];
 			}
 
 			if(in_array($val['type'], [1,2])){

@@ -18,6 +18,8 @@
       <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
       <!-- 样式 -->
       <link href="/static/build/css/custom.css" rel="stylesheet">
+      <!-- 时间选择器 -->
+      <link href="/static/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -56,12 +58,13 @@
             <h3 class="title">有效期设置</h3>
             <form action="/manage/company/active_time_ajax" method="post" class="form-horizontal form-label-left" id="form" url="/manage/company/active_time_ajax">
               <div class="form-group">
-                <label for="active_time" class="control-label col-md-3 col-sm-3 col-xs-12">账户有效期</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">账户有效期</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <input type="text" id="active_time" name="active_time" class="form-control col-md-7 col-xs-12 parsley-success" value="{$list.active_time|date='Y-m-d',###}">
+                  <input size="16" name="active_time" value="{$list.active_time|date='Y-m-d',###}" type="text" id="datetime_pick" class="form-control col-md-7 col-xs-12 parsley-success">
                   <input type="hidden" id="id" name="id" value="{$list.id}">
                 </div>
-              </div>
+
+                  </div>
 
               <div class="btns col-xs-12" style="text-align: center;margin-top: 20px;">
                 <button class="btn btn-default btn-sm" type="button">取消</button>
@@ -95,8 +98,24 @@
  <script src="/static/build/js/custom.js"></script>
     <!-- 新增、编辑课程js -->
     <script src="/static/build/js/course_add_edit.js"></script>
+    <script src="/static/vendors/moment/moment.js"></script>
+    <script src="/static/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 
     <script>
+
+      //加载时间控件
+      $(function () {
+        $('#datetime_pick').datetimepicker({
+                  format:'YYYY-MM-DD HH:mm'
+//                  initialDate: new Date(),
+//                  minView:'month',
+//                  language: 'zh-CN',
+//                  autoclose:true
+//                  startDate:new Date()
+ }
+        );
+      });
+
         $("#form").submit(function () {
 
             $.ajax({
