@@ -122,7 +122,7 @@ class PayController extends CommonController {
 	private function addAmountToCompany($orderNum) {
 
 		$m = M();
-		$order = $m -> table('`order`') -> where(['order_num' => $orderNum, 'status' => 0]) -> find();
+		$order = $m -> table('`order`') -> where(['order_num' => $orderNum, 'status' => 1]) -> find();
 		if (is_null($order) || !count($order)) {
 			return false;
 		}
