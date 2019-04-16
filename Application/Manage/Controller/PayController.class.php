@@ -66,6 +66,10 @@ class PayController extends CommonController {
 		$config = new \WxPayConfig();
 		$notifiedData = file_get_contents('php://input');
 		$xmlObj = simplexml_load_string($notifiedData, 'SimpleXMLElement', LIBXML_NOCDATA);
+		if (is_null($xmlObj) || $xmlObj == false) {
+			$this -> callback_ok('FAIL');
+            exit;
+		}
 
 		M('tmp') -> add(['str' => json_encode($xmlObj)]);
         $xmlObj = json_decode(json_encode($xmlObj), true);
@@ -77,6 +81,7 @@ class PayController extends CommonController {
             $save = [
             	'status' => 1,
             	'updated_time' => time(),
+            	'price' => bcdiv($xmlObj['total_fee'], 100, 2),
             ];
 
             $done = M('order') -> where(['order_num' => $trade_no]) -> save($save);
