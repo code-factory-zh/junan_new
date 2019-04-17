@@ -61,12 +61,27 @@ class OrderModel extends BaseModel {
 	}
 
 	/**
-	 * 根据用户订单号发送一个
+	 * 根据用户订单号向用户发送相关课程
 	 * @Author   邱湘城
 	 * @DateTime 2019-04-15T23:57:32+0800
 	 */
-	public function sendGoodsToUserFromOrderSn($orderSN) {
+	public function sendGoodsToUserFromOrderSn($where) {
 
+		// $orderDetailList = $this -> table('`order` o') ->
+		// join('join order_detail od on o.id = od.order_id') ->
+		// where($where) ->
+		// getField('od.id,od.course_id');
 
+		// if (is_null($orderDetailList) || !count($orderDetailList)) {
+		// 	return [];
+		// }
+
+		// // 查询当前订单下的企业下的学员
+		// $accounts = $this -> table('account') -> getField('id', 0);
+		// if (is_null($accounts) || !count($accounts)) {
+		// 	return [];
+		// }
+
+		// return $accounts;
 	}
 }

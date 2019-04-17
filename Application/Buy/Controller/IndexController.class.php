@@ -110,7 +110,7 @@ class IndexController extends CommonController{
 		];
 
 		$data['course_list'] = $this -> course -> getCourseList(['is_deleted' => 0], 2);
-		$data['history_list']['buy_amount']    = $this -> order -> getTotalOrderAmount($this -> ufo['id']);
+		$data['history_list']['buy_amount']    = M() -> table('company') -> where(['id' => $this -> ufo['id']]) -> getField('stu_amount');
 		$data['history_list']['learn_amount']  = $this -> account -> getAccountInfoCount(['company_id' => $this -> ufo['id'], 'status' => 0]);
 		$data['history_list']['examed_amount'] = 0;
 

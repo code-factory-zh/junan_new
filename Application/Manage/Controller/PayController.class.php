@@ -59,47 +59,98 @@ class PayController extends CommonController {
 	 */
 	public function finishedWxPay() {
 
+		vendor('Wxpay.example.WxPayJsApiPay');
 		vendor('Wxpay.example.WxPayConfig');
-		$config = new \WxPayConfig();
+		vendor('Wxpay.lib.WxPayApi');
 
+		$config = new \WxPayConfig();
 		$notifiedData = file_get_contents('php://input');
 		$xmlObj = simplexml_load_string($notifiedData, 'SimpleXMLElement', LIBXML_NOCDATA);
+		if (is_null($xmlObj) || $xmlObj == false) {
+			$this -> callback_ok('FAIL');
+            exit;
+		}
+
 		M('tmp') -> add(['str' => json_encode($xmlObj)]);
-
         $xmlObj = json_decode(json_encode($xmlObj), true);
+
 		if ($xmlObj['return_code'] == "SUCCESS" && $xmlObj['result_code'] == "SUCCESS") {
-			foreach($xmlObj as $k => $v) {
-				if($k == 'sign') {
-					$xmlSign = $xmlObj[$k];
-					unset($xmlObj[$k]);
-				};
-			}
+			if(!isset($xmlObj['sign'])) { exit; }
 
-			$sign = http_build_query($xmlObj);
-            $sign = md5($sign . '&key=' . $config -> GetKey());
-            $sign = strtoupper($sign);
+            $trade_no = $xmlObj['out_trade_no']; // 总订单号
+            $save = [
+            	'status' => 1,
+            	'updated_time' => time(),
+            	'price' => bcdiv($xmlObj['total_fee'], 100, 2),
+            ];
 
-            if ($sign === $xmlSign) {
-            	M('tmp') -> add(['str' => $sign . ' ' . $xmlSign]);
-                $trade_no = $xmlObj['out_trade_no']; // 总订单号
-            	M('order') -> where(['order_num' => $trade_no]) -> save(['status' => 1, 'updated_time' => time()]);
-                $this -> callback_ok();
-            } else {
-            	M('tmp') -> add(['str' => 'no']);
+            $done = M('order') -> where(['order_num' => $trade_no]) -> save($save);
+            if (!$done) {
+            	$this -> callback_ok('FAIL');
+            	exit;
             }
+
+            // 非安全线程
+			$this -> addAmountToCompany($trade_no);
+            $this -> callback_ok();
+            exit;
+
+            // 签名验证
+			// foreach($xmlObj as $k => $v) {
+			// 	if($k == 'sign') {
+			// 		$xmlSign = $xmlObj[$k];
+			// 		unset($xmlObj[$k]);
+			// 	};
+			// }
+
+			// ksort($xmlObj);
+			// $sign = http_build_query($xmlObj);
+   //          $sign = md5($sign . '&key=' . $config -> GetKey());
+   //          $sign = strtoupper($sign);
+
+   //          if ($sign === $xmlSign) {
+   //              $this -> callback_ok();
+   //          } else {
+   //          	M('tmp') -> add(['str' => $sign . ' ' . $xmlSign]);
+   //          }
 		}
 	}
+
+	/**
+	 * 找到未支付订单
+	 * 根据未支付订单写入的人数更新当前企业可邀请人数
+	 * 不可重复插入
+	 * [addAmountToCompany description]
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-17T01:11:17+0800
+	 */
+	private function addAmountToCompany($orderNum) {
+
+		$m = M();
+		$order = $m -> table('`order`') -> where(['order_num' => $orderNum, 'status' => 1]) -> find();
+		if (is_null($order) || !count($order)) {
+			return false;
+		}
+
+		$where = "WHERE id = {$order['company_id']}";
+		$sql = "UPDATE company c SET c.stu_amount = c.stu_amount + {$order['count']} {$where}";
+		if (!$done) {
+			return $m -> execute($sql);
+		}
+		return true;
+	}
+
 
 	/**
 	 * 回调微信  完成
 	 * @Author   邱湘城
 	 * @DateTime 2019-01-10T01:41:53+0800
 	 */
-	private function callback_ok() {
+	private function callback_ok($msg = 'SUCCESS') {
 
 		vendor("Wxpay.lib.WxPayData");
 		$notify = new \WxPayNotifyReply;
-		$notify -> SetReturn_code("SUCCESS");
+		$notify -> SetReturn_code($msg);
 		$notify -> SetReturn_msg("OK");
 		$xml = $notify -> ToXml();
 		echo $xml;
