@@ -305,7 +305,12 @@ class IndexController extends CommonController{
 
 		$token = $this -> getAccessTokenXcx();
 		$url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' . $token;
-		$rel = $this -> httpPost($url, ['scene' => "id={$data['id']}", 'width' => 430]);
+		
+		$params = ['scene' => "id={$data['id']}", 'width' => 430];
+		if (isset($p['page'])) {
+			$params['page'] = $p['page'];
+		}
+		$rel = $this -> httpPost($url, $params);
 
 		file_put_contents("./Uploads/code/{$data['open_id']}.png", $rel);
 
