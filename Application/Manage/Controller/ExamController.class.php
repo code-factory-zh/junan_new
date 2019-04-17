@@ -224,6 +224,15 @@ class ExamController extends CommonController {
 	}
 
 	/**
+	 * 2019/03/27
+	 * 报告页面
+	 */
+	public function report() {
+//		$this -> assign('list', $list);
+		$this -> display('Exam/report');
+	}
+
+	/**
 	 * 考试成绩单
 	 * @author cuiruijun
 	 * @date   2019/1/20 下午6:18
