@@ -636,16 +636,29 @@ class ExamController extends CommonController
 
 		//获取当前题目详情
 		$exam_question_detail = $this->examQuestion->getExamQuestionDetail($g['exam_question_id']);
+//		var_dump($exam_question_detail);
 
 		//获取每道题的详细信息和是否答对了题目
 		$exam_question = $this->question->get_question_detail($exam_question_detail['question_ids'], $accout_id, $g['exam_question_id']);
 
 		//获取每道题分数分配
-		$exam_detail = $this->exam->findExam(['id' => $g['exam_question_id'], 'is_deleted' => 0]);
+		$exam_detail = $this->exam->getOne(['id' => $exam_question_detail['exam_id']]);
 
 		//获取每道题的参与人数和答对的题目数
 		//答对的题目数
-//		$this->detail->
+		$count = $this->detail->get_exam_count(['exam_question_id' => $g['exam_question_id'], 'status' => 1]);
+
+		//参与人次和排名
+		$join_detail = $this->member->get_join_result($exam_question_detail['course_id'], $exam_question_detail['company_id']);
+
+		//参与总人数
+		$join_count_detail = $this->member->get_join_count($exam_question_detail['course_id']);
+		$join_total = count($join_count_detail);
+
+		//排名
+		$score_array = array_column($join_detail, 'score');
+
+		$rank = array_search($exam_question_detail['score'], $score_array) + 1;
 
 
 		//不同类型的题目分数设置
@@ -689,9 +702,9 @@ class ExamController extends CommonController
 			'my_score' => $exam_question_detail['score'],
 			'total_questions' => count(explode(',', $exam_question_detail['question_ids'])),
 			'total_score' => $exam_detail['score'],
-			'correct_question' => 10,
-			'join_users' => 10,
-			'my_rank' => 5,
+			'correct_question' => $count,
+			'join_users' => $join_total,
+			'my_rank' => $rank,
 		];
 
 		$this->rel($data)->e();

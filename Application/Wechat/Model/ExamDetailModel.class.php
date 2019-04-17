@@ -71,4 +71,16 @@ class ExamDetailModel extends BaseModel
 	public function get_exam_detail($where){
 		return $this->where($where)->select();
 	}
+
+	/**
+	 * 根据条件查询满足的条数
+	 * @author cuirj
+	 * @date   2019/4/17 下午12:23
+	 *
+	 * @param  array $where
+	 * @return  array
+	 */
+	public function get_exam_count($where){
+		return $this->where($where)->count();
+	}
 }

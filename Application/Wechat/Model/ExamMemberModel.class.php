@@ -63,4 +63,32 @@ class ExamMemberModel extends BaseModel
 
 		return $this->query($sql);
 	}
+
+	/**
+	 * 课程和本公司对应参与的人数和名次
+	 * @author cuirj
+	 * @date   2019/4/17 下午12:48
+	 * @param  int course_id
+	 * @param  int $company_id
+	 * @return  array
+	 */
+	public function get_join_result($course_id, $company_id){
+		$sql = 'SELECT a.account_id, a.score FROM (select * from exam_member as e where company_id = '.$company_id.' and course_id='.$course_id.' order by e.score desc limit 10000) as a GROUP BY a.account_id';
+
+		return $this->query($sql);
+	}
+
+	/**
+	 * 课程对应参与的总人数
+	 * @author cuirj
+	 * @date   2019/4/17 下午12:48
+	 * @param  int course_id
+	 * @param  int $company_id
+	 * @return  array
+	 */
+	public function get_join_count($course_id){
+		$sql = 'SELECT a.account_id, a.score FROM (select * from exam_member as e where  course_id='.$course_id.' order by e.score desc limit 10000) as a GROUP BY a.account_id';
+
+		return $this->query($sql);
+	}
 }
