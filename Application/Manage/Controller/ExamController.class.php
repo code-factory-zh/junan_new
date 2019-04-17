@@ -222,4 +222,69 @@ class ExamController extends CommonController {
 		$this -> assign('list', $list);
 		$this -> display('Exam/achlist');
 	}
+
+	/**
+	 * 考试成绩单
+	 * @author cuiruijun
+	 * @date   2019/1/20 下午6:18
+	 * @method get
+	 * @return  array
+	 */
+	public function score_report(){
+		$this->_get($g, 'exam_question_id');
+		$accout_id = $this->u['id'];
+		//		$accout_id = 1;
+
+		//获取当前
+		$exam_question_detail = $this->examQuestion->getExamQuestionDetail($g['exam_question_id']);
+		$exam_question = $this->question->get_question_detail($exam_question_detail['question_ids'], $accout_id, $g['exam_question_id']);
+
+		//不同类型的题目分数设置
+		$question_type_score = [
+			1 => 20,
+			2 => 25,
+			3 => 21,
+		];
+
+		$answer_explain_result = [];
+		foreach($exam_question as $e_k => $e_v)
+		{
+			$options = json_decode($e_v['option'], true);
+			$per_score = $question_type_score[$e_v['type']];
+
+			if($e_v['type'] == 2){
+				$answer = explode(',', json_decode($e_v['answer'], true));
+				$my_answer = explode(',', json_decode($e_v['answer_id'], true));
+			}else{
+				$answer = $e_v['answer'];
+				$my_answer = $e_v['answer'];
+			}
+
+			$answer_explain_result[] = [
+				'title' => $e_v['title'],
+				'status' => $e_v['status'],
+				'my_score' => $e_v['score'],
+				'score' => $per_score,
+				'option' => $options,
+				'answer' => $answer,
+				'my_answer' => $my_answer,
+			];
+		}
+
+		$data['question_detail'] = $answer_explain_result;
+		$data['exam_detail'] = [
+			'user_name' => $exam_question_detail['name'],
+			'couse_name' => $exam_question_detail['couse_name'],
+		];
+		$data['score_detail'] = [
+			'my_score' => $exam_question_detail['score'],
+			'total_questions' => count(explode(',', $exam_question_detail['question_ids'])),
+			'total_score' => 100,
+			'correct_question' => 10,
+			'join_users' => 10,
+			'my_rank' => 5,
+		];
+
+		$this->rel($data)->e();
+	}
 }
