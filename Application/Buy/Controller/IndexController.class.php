@@ -243,13 +243,18 @@ class IndexController extends CommonController{
 		return $this -> httpGet($url);
 	}
 
+	// 取验证的必要数据
 	private static function getScreat() {
 
 		$fi = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/cert/screat');
 		return explode("\n", trim($fi));
 	}
 
-
+	/**
+	 * 取公众号TOKEN
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-18T01:54:16+0800
+	 */
 	public function getAccessToken() {
 
 		$auth = self::getScreat();
@@ -259,5 +264,51 @@ class IndexController extends CommonController{
 			$this -> rel($rel) -> e('失败！');
 		}
 		$this -> rel($rel) -> e();
+	}
+
+	/**
+	 * 取得小程序TOKEN
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-18T01:51:00+0800
+	 */
+	public function getAccessTokenXcx() {
+
+		$access_token = session("xcx_access_token");
+		if (!is_null($access_token) && !$access_token) {
+			return $access_token;
+		}
+
+		$auth = self::getScreat();
+		$url = "https://api.weixin.qq.com/cgi-bin/token?appid={$auth[0]}&secret={$auth[1]}&grant_type=client_credential";
+		$rel = $this -> httpGet($url);
+		if (isset($rel['errcode'])) {
+			$this -> rel($rel) -> e('失败！');
+		}
+
+		session("xcx_access_token", $rel['access_token']);
+		return $rel['access_token'];
+	}
+
+	/**
+	 * 生成当前用户专用二维码
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-18T01:50:18+0800
+	 */
+	public function fetchApplicationCode() {
+
+		$this -> _get($p, ['open_id']);
+
+		$data = $this -> user -> getCompanyByWhere(['open_id' => $p['open_id']], 'id,open_id');
+		if (is_null($data)) {
+			$this -> e('不合法的open_id');
+		}
+
+		$token = $this -> getAccessTokenXcx();
+		$url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' . $token;
+		$rel = $this -> httpPost($url, ['scene' => "id={$data['id']}", 'width' => 430]);
+
+		file_put_contents("./Uploads/code/{$data['open_id']}.png", $rel);
+
+		$this -> rel(['img' => "/Uploads/code/{$data['open_id']}.png"]) -> e();
 	}
 }
