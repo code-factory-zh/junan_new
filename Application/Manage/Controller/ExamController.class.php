@@ -14,6 +14,12 @@ class ExamController extends CommonController {
 	private $curri;
 	private $exam_member;
 
+	private $member;
+	private $question;
+	private $course_model;
+	private $detail;
+	private $examQuestion;
+
 	public function _initialize() {
 
 		parent::_initialize();
@@ -25,6 +31,12 @@ class ExamController extends CommonController {
 		$this -> curri = new \Manage\Model\CurriculumModel;
 		$this -> questions = new \Manage\Model\QuestionsModel;
 		$this -> exam_member = new \Manage\Model\ExamMemberModel();
+
+		$this -> member = new \Wechat\Model\ExamMemberModel;
+		$this -> course_model = new \Manage\Model\CourseModel;
+		$this -> question = new \Manage\Model\QuestionsModel;
+		$this -> detail = new \Wechat\Model\ExamDetailModel;
+		$this -> examQuestion = new \Wechat\Model\ExamQuestionModel;
 	}
 
 
@@ -227,7 +239,7 @@ class ExamController extends CommonController {
 	 * 2019/03/27
 	 * 报告页面
 	 */
-	public function report() {
+	public function report1() {
 //		$this -> assign('list', $list);
 		$this -> display('Exam/report');
 	}
