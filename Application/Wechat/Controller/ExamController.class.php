@@ -634,15 +634,25 @@ class ExamController extends CommonController
 		$accout_id = $this->u['id'];
 		//		$accout_id = 1;
 
-		//获取当前
+		//获取当前题目详情
 		$exam_question_detail = $this->examQuestion->getExamQuestionDetail($g['exam_question_id']);
+
+		//获取每道题的详细信息和是否答对了题目
 		$exam_question = $this->question->get_question_detail($exam_question_detail['question_ids'], $accout_id, $g['exam_question_id']);
+
+		//获取每道题分数分配
+		$exam_detail = $this->exam->findExam(['id' => $g['exam_question_id'], 'is_deleted' => 0]);
+
+		//获取每道题的参与人数和答对的题目数
+		//答对的题目数
+//		$this->detail->
+
 
 		//不同类型的题目分数设置
 		$question_type_score = [
-			1 => 20,
-			2 => 25,
-			3 => 21,
+			1 => $exam_detail['dx_question_score'],
+			2 => $exam_detail['fx_question_score'],
+			3 => $exam_detail['pd_question_score'],
 		];
 
 		$answer_explain_result = [];
@@ -678,7 +688,7 @@ class ExamController extends CommonController
 		$data['score_detail'] = [
 			'my_score' => $exam_question_detail['score'],
 			'total_questions' => count(explode(',', $exam_question_detail['question_ids'])),
-			'total_score' => 100,
+			'total_score' => $exam_detail['score'],
 			'correct_question' => 10,
 			'join_users' => 10,
 			'my_rank' => 5,
