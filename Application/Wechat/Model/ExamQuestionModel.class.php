@@ -34,7 +34,7 @@ class ExamQuestionModel extends BaseModel
 	 */
     public function getExamQuestionDetail($exam_question_id){
     	return $this->alias('e')
-			->field('a.name, c.name as couse_name,m.score,e.question_ids as question_ids')
+			->field('a.name, c.name as couse_name,m.score,e.question_ids as question_ids,e.exam_id, a.company_id,e.course_id')
 			->where(['e.id' => $exam_question_id])
 			->join('course as c on e.course_id = c.id', 'left')
 			->join('account as a on e.account_id = a.id', 'left')
