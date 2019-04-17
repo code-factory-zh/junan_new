@@ -59,6 +59,6 @@ class ReceiptController extends CommonController {
 
 		$data['list'] = $jobs;
 		$this->assign($data);
-		$this->display('receipt/edit');
+		$this->display('Receipt/edit');
 	}
 }
