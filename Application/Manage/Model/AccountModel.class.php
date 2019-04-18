@@ -35,9 +35,9 @@ class AccountModel extends BaseModel {
 
 		if (!isset($arr['id'])) {
 			if (!$this -> add($arr)) {
-				return '注册失败！';
+				return 0;
 			}
-			return '';
+			return $this -> getLastInsId();
 		}
 	}
 

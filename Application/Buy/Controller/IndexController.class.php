@@ -206,7 +206,16 @@ class IndexController extends CommonController{
 	 */
 	public function appRegisterPage() {
 
-		$this -> _get($p, ['company_id']);
+		$this -> _get($p, ['open_id']);
+
+		$user = $this -> account -> table('account') -> where(['open_id' => $p['open_id']]) -> find();
+		if (!is_null($user) || count($user)) {
+			$this -> rel(['uid' => $user['id']]) -> e(0, '登录成功！');
+		}
+
+		if (!isset($p['company_id'])) {
+			$this -> e('缺省企业ID参数');
+		}
 
 		$data = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
 		if (is_null($data) || !count($data)) {
@@ -236,7 +245,7 @@ class IndexController extends CommonController{
 		}
 
 		$this -> phoneCheck($p['mobile'], '您输入的手机号码格式有误！');
-		if (is_numeric($p['card_num']) || strlen($p['card_num']) < 15) {
+		if (!is_numeric($p['card_num']) || strlen($p['card_num']) < 15) {
 			$this -> e('您输入的身份证不合法！');
 		}
 
@@ -256,11 +265,11 @@ class IndexController extends CommonController{
 			$insertAccount['join_date'] = strtotime($p['date']);
 		}
 
-		$err = $this -> account -> saveAccount($insertAccount);
-		if ($err != '') {
+		$uid = $this -> account -> saveAccount($insertAccount);
+		if (!$uid) {
 			$this -> e($err);
 		}
-		$this -> e();
+		$this -> rel(['uid' => $uid]) -> e();
 	}
 
 	/**
