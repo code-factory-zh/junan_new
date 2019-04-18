@@ -4562,6 +4562,19 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 }
 .test_paper_wrap .paper_content .item .result .yourAnswer{
     margin-right: 20px;
+    padding-right: 25px;
+    position: relative;
+}
+.test_paper_wrap .paper_content .item .result .yourAnswer img{
+    position: absolute;
+    right: 0;
+    top: 2px;
+}
+.test_paper_wrap .paper_content .item .result .getScore i{
+    font-style: normal;
+}
+.test_paper_wrap .paper_content .item .result .getScore i.blue{
+    color: rgb(0,132,255);
 }
 .test_paper_wrap .paper_content .item .line{
     height: 1px;
