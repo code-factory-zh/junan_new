@@ -142,7 +142,7 @@ class IndexController extends CommonController{
 	}
 
 	/**
-	 * 注册企业
+	 * 公众号注册企业
 	 * @Author   邱湘城
 	 * @DateTime 2019-03-31T11:15:00+0800
 	 */
@@ -183,7 +183,7 @@ class IndexController extends CommonController{
 	}
 
 	/**
-	 * 登录功能
+	 * 公众号登录功能
 	 * @Author   邱湘城
 	 * @DateTime 2019-03-31T11:54:57+0800
 	 */
@@ -197,6 +197,70 @@ class IndexController extends CommonController{
 			$this -> e();
 		}
 		$this -> e('登录失败！');
+	}
+
+	/**
+	 * 小程序注册页面数据
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-19T00:24:13+0800
+	 */
+	public function appRegisterPage() {
+
+		$this -> _get($p, ['company_id']);
+
+		$data = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
+		if (is_null($data) || !count($data)) {
+			$this -> e('没有找到这个企业！');
+		}
+
+		$out = [
+			'page_title' => '考生信息登记',
+			'company_id' => $data['id'],
+			'company_name' => $data['company_name'],
+		];
+		$this -> rel($out) -> e();
+	}
+
+	/**
+	 * 小程序注册
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-19T00:15:04+0800
+	 */
+	public function appRegister() {
+
+		$this -> _get($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
+
+		$company = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
+		if (is_null($company) || !count($company)) {
+			$this -> e('没有找到这个企业！');
+		}
+
+		$this -> phoneCheck($p['mobile'], '您输入的手机号码格式有误！');
+		if (is_numeric($p['card_num']) || strlen($p['card_num']) < 15) {
+			$this -> e('您输入的身份证不合法！');
+		}
+
+		$time = time();
+		$insertAccount = [
+			'open_id' => $p['open_id'],
+			'company_id' => $p['company_id'],
+			'name' => $p['uname'],
+			'mobile' => $p['mobile'],
+			'card_num' => $p['card_num'],
+			'created_time' => $time,
+			'updated_time' => $time,
+			'status' => 0,
+		];
+
+		if (isset($p['date'])) {
+			$insertAccount['join_date'] = strtotime($p['date']);
+		}
+
+		$err = $this -> account -> saveAccount($insertAccount);
+		if ($err != '') {
+			$this -> e($err);
+		}
+		$this -> e();
 	}
 
 	/**
@@ -306,7 +370,7 @@ class IndexController extends CommonController{
 		$token = $this -> getAccessTokenXcx();
 		$url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' . $token;
 		
-		$params = ['scene' => "id={$data['id']}", 'width' => 430];
+		$params = ['scene' => "company_id={$data['id']}", 'width' => 430];
 		if (isset($p['page'])) {
 			$params['page'] = $p['page'];
 		}

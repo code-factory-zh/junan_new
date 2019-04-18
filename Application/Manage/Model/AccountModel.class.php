@@ -26,6 +26,20 @@ class AccountModel extends BaseModel {
 		return $this -> where($where) -> find();
 	}
 
+	/**
+	 * 注册或保存用户状态
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-19T00:28:32+0800
+	 */
+	public function saveAccount($arr) {
+
+		if (!isset($arr['id'])) {
+			if (!$this -> add($arr)) {
+				return '注册失败！';
+			}
+			return '';
+		}
+	}
 
 	/**
 	 * 根据条件取数据
