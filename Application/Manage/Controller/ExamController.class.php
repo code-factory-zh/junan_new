@@ -294,8 +294,8 @@ class ExamController extends CommonController {
 			$per_score = $question_type_score[$e_v['type']];
 
 			if($e_v['type'] == 2){
-				$answer = explode(',', json_decode($e_v['answer'], true));
-				$my_answer = explode(',', json_decode($e_v['answer_id'], true));
+				$answer = implode('', json_decode($e_v['answer'], true));
+				$my_answer = implode('', json_decode($e_v['answer_id'], true));
 			}else{
 				$answer = $e_v['answer'];
 				$my_answer = $e_v['answer'];
