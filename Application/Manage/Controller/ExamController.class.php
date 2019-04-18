@@ -253,13 +253,8 @@ class ExamController extends CommonController {
 	 */
 	public function score_report(){
 		$this->_get($g, 'exam_question_id');
-//		$accout_id = $this->u['id'];
-//		echo $accout_id;
-		//		$accout_id = 1;
-
 		//获取当前题目详情
 		$exam_question_detail = $this->examQuestion->getExamQuestionDetail($g['exam_question_id']);
-		//		var_dump($exam_question_detail);
 		$accout_id = $exam_question_detail['account_id'];
 
 		//获取每道题的详细信息和是否答对了题目
@@ -321,6 +316,8 @@ class ExamController extends CommonController {
 		$data['exam_detail'] = [
 			'user_name' => $exam_question_detail['name'],
 			'couse_name' => $exam_question_detail['couse_name'],
+			'id_card' => $exam_question_detail['card_num'],
+			'mobile' => $exam_question_detail['mobile'],
 		];
 		$data['score_detail'] = [
 			'my_score' => $exam_question_detail['score'],
