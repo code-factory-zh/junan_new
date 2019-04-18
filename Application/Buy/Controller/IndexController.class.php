@@ -27,7 +27,52 @@ class IndexController extends CommonController{
 	}
 
 	/**
-	 * 生成二维码
+	 * 购买课程主页
+	 * @Author   邱湘城
+	 * @DateTime 2019-03-31T14:41:26+0800
+	 */
+	public function index() {
+
+		$this -> _get($p, ['open_id']);
+
+		if (!count($this -> ufo)) {
+			$this -> e('请先登录！');
+		}
+
+		$data = [
+			'course_list' => [],
+			'history_list' => [],
+			'btn_buy' => '买课',
+			'btn_invitation' => '邀请学员',
+			'user_ttl' => '',
+			'tips' => '',
+		];
+
+		$company = $this -> user -> getCompanyByWhere(['id' => $this -> ufo['id']]);
+		if (is_null($company) || !count($company)) {
+			$this -> e('帐号异常！');
+		}
+
+		if (!empty($company['active_time'])) {
+			$data['user_ttl'] = '帐号有效期至：' . date('Y年m月d日', $company['active_time']);
+		}
+
+		$data['course_list'] = $this -> course -> getCourseList(['is_deleted' => 0], 2);
+		$data['history_list']['buy_amount']    = $company['stu_amount'];
+		$data['history_list']['learn_amount']  = $this -> account -> getAccountInfoCount(['company_id' => $this -> ufo['id'], 'status' => 0]);
+		$data['history_list']['examed_amount'] = 0;
+
+		$time = time();
+		if ($company['active_time'] != 0 && ($company['active_time'] - $time < (86400 * 30))) {
+			$ttl = date('Y年m月d日', $company['active_time']);
+			$data['tips'] = "您的账号将于{$ttl}，请与平台运营人员联系处理！<br />电话：40012221212。";
+		}
+
+		$this -> rel($data) -> e(0);
+	}
+
+	/**
+	 * 生成二维码 · 旧的！不能用的
 	 * @Author   邱湘城
 	 * @DateTime 2019-03-31T19:16:10+0800
 	 */
@@ -89,35 +134,6 @@ class IndexController extends CommonController{
 	}
 
 	/**
-	 * 购买课程主页
-	 * @Author   邱湘城
-	 * @DateTime 2019-03-31T14:41:26+0800
-	 */
-	public function index() {
-
-		$this -> _get($p, ['open_id']);
-
-		if (!count($this -> ufo)) {
-			$this -> e('请先登录！');
-		}
-
-		$data = [
-			'course_list' => [],
-			'history_list' => [],
-			'btn_buy' => '买课',
-			'btn_invitation' => '邀请学员',
-			'user_ttl' => '帐号有效期至：2019年3月31日',
-		];
-
-		$data['course_list'] = $this -> course -> getCourseList(['is_deleted' => 0], 2);
-		$data['history_list']['buy_amount']    = M() -> table('company') -> where(['id' => $this -> ufo['id']]) -> getField('stu_amount');
-		$data['history_list']['learn_amount']  = $this -> account -> getAccountInfoCount(['company_id' => $this -> ufo['id'], 'status' => 0]);
-		$data['history_list']['examed_amount'] = 0;
-
-		$this -> rel($data) -> e(0);
-	}
-
-	/**
 	 * 用户注册页面
 	 * @Author   邱湘城
 	 * @DateTime 2019-03-31T11:14:35+0800
@@ -173,6 +189,7 @@ class IndexController extends CommonController{
 		$p['password'] = $this -> _encrypt($p['pwd']);
 		unset($p['pwd'], $p['very_pwd']);
 
+		$p['active_time'] = time() + (86400 * 360);
 		$p['share_id'] = md5(time() . rand(10000, 99999));
 		$done = $this -> user -> createCompany($p);
 		if (!$done) {
@@ -193,10 +210,16 @@ class IndexController extends CommonController{
 		$this -> lenCheck('code', 6);
 		$this -> lenCheck('pwd', 6);
 
-		if ($this -> user -> login_very($p)) {
-			$this -> e();
+		$err = $this -> user -> login_very($p);
+		if ($err === -1) {
+			$this -> e('您的帐号已过期！');
 		}
-		$this -> e('登录失败！');
+
+		if (!$err) {
+			$this -> e('登录失败！');
+		}
+
+		$this -> e();
 	}
 
 	/**
@@ -217,7 +240,7 @@ class IndexController extends CommonController{
 			$this -> e('缺省企业ID参数');
 		}
 
-		$data = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
+		$data = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name,stu_amount');
 		if (is_null($data) || !count($data)) {
 			$this -> e('没有找到这个企业！');
 		}
@@ -227,6 +250,12 @@ class IndexController extends CommonController{
 			'company_id' => $data['id'],
 			'company_name' => $data['company_name'],
 		];
+
+		$count = $this -> account -> getAccountInfoCount(['company_id' => $p['company_id']]);
+		if ($data['stu_amount'] <= $count) {
+			$this -> e('当前企业已达到学员上限，无法进行注册，请您联系企业管理员。');
+		}
+
 		$this -> rel($out) -> e();
 	}
 
@@ -237,7 +266,7 @@ class IndexController extends CommonController{
 	 */
 	public function appRegister() {
 
-		$this -> _get($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
+		$this -> _post($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
 
 		$company = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
 		if (is_null($company) || !count($company)) {

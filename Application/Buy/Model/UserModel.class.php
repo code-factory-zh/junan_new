@@ -48,6 +48,9 @@ class UserModel extends BaseModel {
 				if (!empty($user['open_id']) && $user['open_id'] != $data['open_id']) {
 					return false;
 				}
+				if ($user['active_time'] != 0 && $user['active_time'] - time() < 0) {
+					return -1;
+				}
 				return true;
 			}
 		}
