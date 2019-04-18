@@ -309,6 +309,7 @@ class ExamController extends CommonController {
 				'option' => $options,
 				'answer' => $answer,
 				'my_answer' => $my_answer,
+				'type' => $e_v['type']
 			];
 		}
 
