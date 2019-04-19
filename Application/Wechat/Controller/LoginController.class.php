@@ -91,6 +91,14 @@ class LoginController extends CommonController {
 		$this -> rel($us) -> e();
 	}
 
+	public function getOpenId() {
+
+		$this -> ignore_token() -> _post($p, ['code']);
+
+		$rel = $this -> get_open_id($p['code']);
+		$this -> rel($rel) -> e();
+	}
+
 	/**
 	 * 根据code取得openid
 	 * @Author   邱湘城
@@ -109,6 +117,29 @@ class LoginController extends CommonController {
 		return explode("\n", trim($fi));
 	}
 
+	// public function dologin() {
+
+	// 	$this -> ignore_token() -> _get($p, ['company_id', 'mobile', 'code']);
+	// 	$this -> isint(['company_id', 'mobile']);
+	// 	$this -> phoneCheck($p['mobile']);
+
+	// 	$rel = $this -> get_open_id($p['code']);
+	// 	if (!is_array($rel) || !isset($rel['openid'])) {
+	// 		$this -> rel([]) -> e($rel['errcode'], '效验获取open_id失败！');
+	// 	}
+
+	// 	$where = ['a.company_id' => $p['company_id'], 'a.mobile' => $p['mobile'], 'a.status' => 0, 'c.status' => 0];
+	// 	$user = $this -> user -> getCompanyUserByWhere($where);
+	// 	if (is_null($user) || !count($user)) {
+	// 		$this -> e('登录失败！');
+	// 	}
+
+	// 	// $this -> rel(['open_id' => $rel['openid']]) -> e();
+	// 	pr($rel, false);
+	// 	pr($user);
+	// }
+
+
 	/**
 	 * 登录功能
 	 * @Author   邱湘城
@@ -116,7 +147,7 @@ class LoginController extends CommonController {
 	 */
 	public function dologin() {
 
-		$this -> ignore_token() -> _post($p, ['company_id', 'mobile', 'code']);
+		$this -> ignore_token() -> _get($p, ['company_id', 'mobile', 'code']);
 		$this -> isint(['company_id', 'mobile']);
 		$this -> phoneCheck($p['mobile']);
 
@@ -147,7 +178,7 @@ class LoginController extends CommonController {
 
 		$this -> save_openid_token($token, $user);
 		// pr($this -> get_openid_token($token));
-		$this -> rel(['token' => $token]) -> e();
+		$this -> rel(['open_id' => $rel['openid']]) -> e();
 	}
 
 
@@ -171,7 +202,7 @@ class LoginController extends CommonController {
 	// 检查用户是否已登录过
 	public function check() {
 
-		$this -> _get($p, ['token']);
+		$this -> _get($p);
 		$this -> e();
 	}
 
