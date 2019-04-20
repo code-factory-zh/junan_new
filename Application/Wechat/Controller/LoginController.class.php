@@ -147,7 +147,7 @@ class LoginController extends CommonController {
 	 */
 	public function dologin() {
 
-		$this -> ignore_token() -> _get($p, ['company_id', 'mobile', 'code']);
+		$this -> ignore_token() -> _post($p, ['company_id', 'mobile', 'code']);
 		$this -> isint(['company_id', 'mobile']);
 		$this -> phoneCheck($p['mobile']);
 
@@ -158,7 +158,7 @@ class LoginController extends CommonController {
 		}
 
 		$rel = $this -> get_open_id($p['code']);
-		if (!is_array($rel) || (!isset($rel['openid']) && !isset($rel['session_key']))) {
+		if (!is_array($rel) || !isset($rel['openid'])) {
 			$this -> rel([]) -> e($rel['errcode'], '效验获取open_id失败！');
 		}
 

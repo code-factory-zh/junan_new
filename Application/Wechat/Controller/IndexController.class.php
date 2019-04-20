@@ -45,27 +45,56 @@ class IndexController extends CommonController {
 
 		$this -> _get($p);
 
-		$where = "cac.account_id = {$this -> u['id']} AND c.type = 0";
+		$data = ['banner' => 'http://admin.joinersafe.com/img/idx_banner.png', 'list' => []];
+		$list = $this -> account_course -> getCompanyCourseList();
+		if (!is_null($list) && count($list)) {
+			foreach ($list as &$values) {
+				$values['icon'] = '';
+				$values['finished'] = '';
+				$values['type_icon'] = 1;
+				$values['studied'] = 2;
+				$values['btn'] = '去考试';
+			}
+		}
+
+		if (!is_null($list) && count($list)) {
+			$data['list'] = $list;
+		}
+		$this -> rel($data) -> e();
+
+
+
+
+		/**
+		 * 下面是旧的，不需要了
+		 */
+
+
+		$where = "cac.account_id = {$this -> u['id']}";
 		$list = $this -> account_course -> getListCourses($where);
-		foreach ($list as &$items) {
+		if (!is_null($list) && count($list)) {
+			foreach ($list as &$items) {
 
-			$items['finished'] = 0;
-			// 全部学完可以考试
-			// 按钮点亮
-			if ($items['total_chapter'] == $items['studied'] && $items['total_chapter'] > 0) {
-				$items['finished'] = 1;
-			}
-
-			// 但如果已有考试通过按钮熄灭
-			if ($items['is_pass_exam']) {
-				$items['studied'] = $items['total_chapter'];
 				$items['finished'] = 0;
-			}
+				// 全部学完可以考试
+				// 按钮点亮
+				if ($items['total_chapter'] == $items['studied'] && $items['total_chapter'] > 0) {
+					$items['finished'] = 1;
+				}
 
-			$items['btn'] = '考试';
-			$items['url'] = '';
-			$items['icon'] = '';
-			$items['type_icon'] = '';
+				// 但如果已有考试通过按钮熄灭
+				if ($items['is_pass_exam']) {
+					$items['studied'] = $items['total_chapter'];
+					$items['finished'] = 0;
+				}
+
+				$items['btn'] = '考试';
+				$items['url'] = '';
+				$items['icon'] = '';
+				$items['type_icon'] = '';
+			}
+		} else {
+			$list = [];
 		}
 
 		$data = ['banner' => 'http://admin.joinersafe.com/img/idx_banner.png', 'list' => $list];
