@@ -21,6 +21,7 @@ class IndexController extends CommonController {
 		$this -> company = new \Wechat\Model\CompanyModel;
 		$this -> user = new \Wechat\Model\UserModel;
 		$this -> account_course = new \Wechat\Model\AccountcourseModel;
+		$this -> course_detail = new \Wechat\Model\DetailcourseModel;
 	}
 
 
@@ -46,14 +47,23 @@ class IndexController extends CommonController {
 		$this -> _get($p);
 
 		$data = ['banner' => 'http://admin.joinersafe.com/img/idx_banner.png', 'list' => []];
-		$list = $this -> account_course -> getCompanyCourseList();
+		$list = $this -> account_course -> getCompanyCourseList($this -> u['id']);
 		if (!is_null($list) && count($list)) {
+
 			foreach ($list as &$values) {
 				$values['icon'] = '';
-				$values['finished'] = '';
 				$values['type_icon'] = 1;
-				$values['studied'] = 2;
-				$values['btn'] = '去考试';
+				$values['studied'] = $values['studied'];
+				if (is_null($values['finished'])) {
+					$values['finished'] = 0;
+				}
+				if ($values['finished']) {
+					$values['btn'] = '已完成';
+				} else if($values['total_chapter'] != 0 && $values['total_chapter'] == $values['studied']) {
+					$values['btn'] = '去考试';
+				} else {
+					$values['btn'] = '学习中';
+				}
 			}
 		}
 

@@ -31,10 +31,12 @@ class AccountcourseModel extends CommonModel {
      * @Author   邱湘城
      * @DateTime 2019-04-20T22:01:22+0800
      */
-    public function getCompanyCourseList() {
+    public function getCompanyCourseList($account_id) {
 
         $sql = "SELECT c.id, c.name, c.price, c.detail,
-        (SELECT COUNT(*) FROM course_detail cd WHERE cd.course_id = c.id) total_chapter
+        (SELECT COUNT(*) FROM course_detail cd WHERE cd.course_id = c.id) total_chapter,
+        (SELECT cacc.is_pass_exam FROM company_account_course_score cacc WHERE cacc.course_id = c.id) finished,
+        (SELECT COUNT(*) FROM company_account_course_chapter cacc WHERE cacc.status = 0 and cacc.account_id = {$account_id} AND cacc.course_id = c.id) studied
         FROM course c
         WHERE c.is_deleted = 0";
         return $this -> query($sql);
