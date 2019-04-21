@@ -314,7 +314,7 @@ class QuestionController extends CommonController
 
 	public function download()
 	{
-		$file_path = trim($_SERVER['DOCUMENT_ROOT'], '/')."/download/demo.xlsx";
+		$file_path = rtrim($_SERVER['DOCUMENT_ROOT'], '/')."/download/demo.xlsx";
 		if(!file_exists($file_path)){
 			echo $file_path . '地址不存在';
 			die();
