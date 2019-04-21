@@ -48,6 +48,9 @@ class AccountController extends CommonController {
 			foreach ($list as &$items) {
 				$items['course_name'] = '-';
 				$items['job_name'] = '-';
+				if (empty($items['pic'])) {
+					$items['pic'] = '/Upload/timg.jpg';
+				}
 				if (isset($jobs[$items['job_id']])) {
 					$items['job_name'] = $jobs[$items['job_id']];
 				}

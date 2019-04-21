@@ -57,12 +57,22 @@ class IndexController extends CommonController {
 				if (is_null($values['finished'])) {
 					$values['finished'] = 0;
 				}
-				if ($values['finished']) {
-					$values['btn'] = '已完成';
-				} else if($values['total_chapter'] != 0 && $values['total_chapter'] == $values['studied']) {
+
+
+				// 全部学完可以考试
+				// 按钮点亮
+				$values['btn'] = '学习中';
+				if ($values['total_chapter'] == $values['studied'] && $values['total_chapter'] > 0) {
+					$values['finished'] = 1;
 					$values['btn'] = '去考试';
-				} else {
-					$values['btn'] = '学习中';
+				}
+
+
+				// 但如果已有考试通过按钮熄灭
+				if ($values['is_pass_exam']) {
+					$values['studied'] = $values['total_chapter'];
+					$values['finished'] = 0;
+					$values['btn'] = '已完成';
 				}
 			}
 		}
@@ -70,6 +80,7 @@ class IndexController extends CommonController {
 		if (!is_null($list) && count($list)) {
 			$data['list'] = $list;
 		}
+		// pr($list);
 		$this -> rel($data) -> e();
 
 

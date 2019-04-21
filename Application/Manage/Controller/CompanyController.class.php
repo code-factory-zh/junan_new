@@ -205,7 +205,7 @@ class CompanyController extends CommonController
         if (IS_POST) {
             $post = I('post.');
             $this->ignore_token();
-            $user = $this->company->getCompany(['company_name' => $post['company_name']]);
+            $user = $this->company->getCompany(['code' => $post['company_name']]);
             if (!($u = $this->company->check($post, $user))) {
                 $this->e('密码不正确或公司被禁用！');
             }
