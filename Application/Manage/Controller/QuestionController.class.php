@@ -316,7 +316,7 @@ class QuestionController extends CommonController
 	{
 		$file_path = $_SERVER['DOCUMENT_ROOT']."download/demo.xlsx";
 		if(!file_exists($file_path)){
-			echo '地址不存在';
+			echo $file_path . '地址不存在';
 			die();
 		}
 
