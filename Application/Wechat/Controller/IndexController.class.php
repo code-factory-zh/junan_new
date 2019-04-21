@@ -89,6 +89,9 @@ class IndexController extends CommonController {
 			foreach ($list as &$values) {
 				$values['icon'] = '';
 				$values['type_icon'] = 1;
+				if (is_null($values['is_pass_exam'])) {
+					$values['is_pass_exam'] = 0;
+				}
 
 				if ($values['is_pass_exam']) {
 					$values['studied'] = $values['total_chapter'];
@@ -107,7 +110,6 @@ class IndexController extends CommonController {
 		if (!is_null($list) && count($list)) {
 			$data['list'] = $list;
 		}
-		// pr($list);
 		$this -> rel($data) -> e();
 
 
