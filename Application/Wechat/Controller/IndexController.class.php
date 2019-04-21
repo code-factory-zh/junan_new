@@ -89,26 +89,20 @@ class IndexController extends CommonController {
 			foreach ($list as &$values) {
 				$values['icon'] = '';
 				$values['type_icon'] = 1;
-				$values['studied'] = $values['studied'];
-				if (is_null($values['finished'])) {
-					$values['finished'] = 0;
+				if (is_null($values['is_pass_exam'])) {
+					$values['is_pass_exam'] = 0;
 				}
 
-
-				// 全部学完可以考试
-				// 按钮点亮
-				$values['btn'] = '学习中';
-				if ($values['total_chapter'] == $values['studied'] && $values['total_chapter'] > 0) {
-					$values['finished'] = 1;
-					$values['btn'] = '已完成';
-				}
-
-
-				// 但如果已有考试通过按钮熄灭
 				if ($values['is_pass_exam']) {
 					$values['studied'] = $values['total_chapter'];
-					$values['finished'] = 0;
+					$values['finished'] = 2;
+					$values['btn'] = '已完成';
+				} else if ($values['total_chapter'] == $values['studied'] && $values['total_chapter'] > 0) {
+					$values['finished'] = 1;
 					$values['btn'] = '去考试';
+				} else {
+					$values['btn'] = '学习中';
+					$values['finished'] = 0;
 				}
 			}
 		}
@@ -116,7 +110,6 @@ class IndexController extends CommonController {
 		if (!is_null($list) && count($list)) {
 			$data['list'] = $list;
 		}
-		// pr($list);
 		$this -> rel($data) -> e();
 
 
