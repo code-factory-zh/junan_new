@@ -36,6 +36,42 @@ class IndexController extends CommonController {
 		$this -> rel(['company_name' => '君安', 'list' => $list]) -> e();
 	}
 
+	/**
+	 * 上传用户头像
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-22T00:31:04+0800
+	 */
+	public function uploadImg() {
+
+		if (is_null($_FILE)) {
+			$this -> e('没有检测到图片文件！');
+		}
+
+		$file = $_FILE['file'];
+		$res = $this -> saveFile($res);
+		if ($res == '') {
+			$this -> e('上传失败，请确保form表单的文件域name名称为 file');
+		}
+
+		$this -> rel($res) -> e();
+	}
+
+	// 保存上传的图片
+	private function saveFile($file) {
+
+		$upload = new \Think\Upload();
+		$upload -> maxSize  = 3145728 ;// 设置附件上传大小
+		$upload -> exts     = array('jpg', 'gif', 'png', 'jpeg'); // 设置附件上传类型
+		$upload -> rootPath = './Uploads/user_pic/'; // 设置附件上传根目录
+		$upload -> savePath = ''; // 设置附件上传（子）目录
+
+		// 上传文件
+		$info = $upload -> uploadOne($file);
+		if(!$info) { // 上传错误提示错误信息
+			return '';
+		}
+		return $info['savepath'] . $info['savename'];
+	}
 
 	/**
 	 * 主页获取课程列表
