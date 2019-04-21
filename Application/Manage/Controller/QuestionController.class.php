@@ -318,7 +318,7 @@ class QuestionController extends CommonController
 
 		$file_name = "demo.xlsx";
 
-		$fp=fopen($file_path,"r");
+		$fp=fopen($file_path,"r+");
 		$file_size=filesize($file_path);
 		//下载文件需要用到的头
 		Header("Content-type: application/octet-stream");
