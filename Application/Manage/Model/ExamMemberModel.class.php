@@ -44,13 +44,14 @@ class ExamMemberModel extends BaseModel
      * 取得考试成绩
      * @DateTime 2019-03-27T23:50:34+0800
      */
-    public function getExamAchList($where, $fields = '*') {
+    public function getExamAchList($where, $fields = '*', $limit = '0,15') {
 
         return $this -> table('exam_member em') ->
                field($fields) ->
                join('left join account a on a.id = em.account_id') ->
                join('left join course c on c.id = em.course_id') ->
                where($where) ->
+               limit($limit) ->
                select();
     }
 }
