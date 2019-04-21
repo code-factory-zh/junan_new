@@ -51,7 +51,7 @@ class CompanyController extends CommonController
 		}
 
 		if($address){
-			$where .= ' and address="' . $address . '"';
+			$where .= ' and address like "%' . $address . '%"';
 		}
         $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time');
 
