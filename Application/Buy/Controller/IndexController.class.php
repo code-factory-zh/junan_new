@@ -231,13 +231,12 @@ class IndexController extends CommonController{
 
 		$this -> _get($p, ['open_id']);
 
+		// 根据open_id查询用户 如果未传入 company_id 直接跳转
 		$user = $this -> account -> table('account') -> where(['open_id' => $p['open_id']]) -> find();
-		if (!is_null($user) || count($user)) {
-			$this -> rel(['uid' => $user['id']]) -> e(0, '登录成功！');
-		}
-
 		if (!isset($p['company_id'])) {
-			$this -> e('缺省企业ID参数');
+			if (!is_null($user) || count($user)) {
+				$this -> rel(['uid' => $user['id']]) -> e(0, '登录成功！');
+			}
 		}
 
 		$data = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name,stu_amount');
