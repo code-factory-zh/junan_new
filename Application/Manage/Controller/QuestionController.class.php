@@ -325,6 +325,8 @@ class QuestionController extends CommonController
 		Header("Accept-Ranges: bytes");
 		Header("Accept-Length:".$file_size);
 		Header("Content-Disposition: attachment; filename=".$file_name);
+		ob_clean();
+		flush();
 		$buffer=1024;
 		$file_count=0;
 		//向浏览器返回数据
