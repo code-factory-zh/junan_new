@@ -377,7 +377,7 @@ class QuestionController extends CommonController
 
 		if ($_FILES)
 		{
-			move_uploaded_file($_FILES['file']['tmp_name'], rtrim($_SERVER['DOCUMENT_ROOT'], '/') .'Uploads/file/' . $_FILES['file']['name']);
+			move_uploaded_file($_FILES['file']['tmp_name'], rtrim($_SERVER['DOCUMENT_ROOT'], '/') .'/Uploads/file/' . $_FILES['file']['name']);
 			$path = 'Uploads/file/' . $_FILES['file']['name'];
 			$extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
