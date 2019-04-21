@@ -100,7 +100,7 @@ class IndexController extends CommonController {
 				$values['btn'] = '学习中';
 				if ($values['total_chapter'] == $values['studied'] && $values['total_chapter'] > 0) {
 					$values['finished'] = 1;
-					$values['btn'] = '去考试';
+					$values['btn'] = '已完成';
 				}
 
 
@@ -108,7 +108,7 @@ class IndexController extends CommonController {
 				if ($values['is_pass_exam']) {
 					$values['studied'] = $values['total_chapter'];
 					$values['finished'] = 0;
-					$values['btn'] = '已完成';
+					$values['btn'] = '去考试';
 				}
 			}
 		}
