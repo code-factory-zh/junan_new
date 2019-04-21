@@ -321,7 +321,7 @@ class QuestionController extends CommonController
 		$fp=fopen($file_path,"r+");
 		$file_size=filesize($file_path);
 		//下载文件需要用到的头
-		Header("Content-type: application/octet-stream");
+		Header("Content-type: application/vnd.ms-excel");
 		Header("Accept-Ranges: bytes");
 		Header("Accept-Length:".$file_size);
 		Header("Content-Disposition: attachment; filename=".$file_name);
