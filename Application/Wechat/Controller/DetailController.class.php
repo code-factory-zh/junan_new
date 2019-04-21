@@ -102,6 +102,9 @@ class DetailController extends CommonController {
 		if (!$amount) {
 			M('company_account_course_chapter') -> add($arr);
 		}
+		if ($data['type'] == 1) {
+			$data['content'] = htmlspecialchars_decode($data['content']);
+		}
 		// pr($data);
 
 		// ppt、视频
