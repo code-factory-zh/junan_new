@@ -390,7 +390,7 @@ class QuestionController extends CommonController
 				$objReader = \PHPExcel_IOFactory::createReader('Excel5');
 			}
 
-			$objPHPExcel = $objReader->load($path);//$file_url即Excel文件的路径
+			$objPHPExcel = $objReader->load(rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/' . $path);//$file_url即Excel文件的路径
 			//循环读取excel文件,读取一条,插入一条
 			$couse_title_id_arr = $this->get_course_title_id_arr();
 
