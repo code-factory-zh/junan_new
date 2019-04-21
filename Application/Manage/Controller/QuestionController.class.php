@@ -377,9 +377,9 @@ class QuestionController extends CommonController
 
 		if ($_FILES)
 		{
-			$res = move_uploaded_file($_FILES['file']['tmp_name'], rtrim($_SERVER['DOCUMENT_ROOT'], '/') .'/Uploads/file/' . $_FILES['file']['name']);
-			echo rtrim($_SERVER['DOCUMENT_ROOT'], '/') .'/Uploads/file/' . $_FILES['file']['name'];
-			var_dump($res);
+			if(!move_uploaded_file($_FILES['file']['tmp_name'], rtrim($_SERVER['DOCUMENT_ROOT'], '/') .'/Uploads/file/' . $_FILES['file']['name'])){
+				$this->e('文件上传失败');
+			}
 			$path = 'Uploads/file/' . $_FILES['file']['name'];
 			$extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
