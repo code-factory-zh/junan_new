@@ -227,7 +227,12 @@ class ExamController extends CommonController {
 			foreach ($list as &$items) {
 				$items['created_time'] = date('Y-m-d H:i:s', $items['created_time']);
 				$items['is_pass_exam'] = $items['is_pass_exam'] == 1 ? '及格' : '未及格';
-				$items['use_time'] = intval($items['use_time'] / 60) . ':' . ($items['use_time'] % 60);
+
+				$use_time = '';
+				if (intval($items['use_time'] / 60) != 0) {
+					$use_time .= intval($items['use_time'] / 60) . '分';
+				}
+				$items['use_time'] = $use_time . ($items['use_time'] % 60) . '秒';
 			}
 		}
 
