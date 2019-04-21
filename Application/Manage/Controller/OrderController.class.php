@@ -139,7 +139,7 @@ class OrderController extends CommonController {
 	public function confirm_pay(){
 		$data['list'] = I('get.id');
 		$this->assign($data);
-		$this->display('order/confirm_pay');
+		$this->display('Order/confirm_pay');
 	}
 
 	/**
