@@ -60,7 +60,7 @@ class CompanyModel extends BaseModel
 
     public function check($data, $args)
     {
-        if ($data['company_name'] != $args['company_name'] or !password_verify($data['password'], $args['password'])) {
+        if ($data['company_name'] != $args['code'] or !password_verify($data['password'], $args['password'])) {
             return false;
         }
         return true;
