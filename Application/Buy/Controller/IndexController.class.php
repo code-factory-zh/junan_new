@@ -106,7 +106,7 @@ class IndexController extends CommonController{
 			'title' => '我要买课',
 			'banner' => [
 				'tips'  => '课程价格',
-				'price' => 100,
+				'price' => 0.00,
 				'unit'  => 'RMB',
 				'spec'  => 'RMB/人',
 			],
@@ -123,8 +123,11 @@ class IndexController extends CommonController{
 			$this -> e('没有课程信息！');
 		}
 
-		$prices = array_column($course, 'price');
-		$rel['banner']['price'] = array_sum($prices);
+		$price = M() -> table('sys_cfg') -> getField('cfg_value');
+		$rel['banner']['price'] = round($price, 2);
+
+		// $prices = array_column($course, 'price');
+		// $rel['banner']['price'] = array_sum($prices);
 
 		// 优惠信息
 		$discount = $this -> discount -> getList();
@@ -214,7 +217,7 @@ class IndexController extends CommonController{
 	public function login() {
 
 		$this -> _post($p, ['code' => '帐号', 'pwd' => '密码', 'open_id']);
-		$this -> lenCheck('code', 6);
+		$this -> lenCheck('code', 5);
 		$this -> lenCheck('pwd', 6);
 
 		$err = $this -> user -> login_very($p);
@@ -263,6 +266,30 @@ class IndexController extends CommonController{
 		}
 
 		$this -> rel($out) -> e();
+	}
+
+
+	/**
+	 * 根据价格和份数计算优惠后的价格
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-23T01:00:06+0800
+	 */
+	public function getRealPrice() {
+
+		$this -> _get($get, ['price', 'count']);
+		$this -> isInt(['price', 'count']);
+
+		$where = "discount_min_num <= {$get['count']} AND discount_max_num >= {$get['count']}";
+		$discount = $this -> discount -> getList($where);
+
+		$outPut = ['price' => $get['price']];
+		if (is_null($discount) || !count($discount)) {
+			$this -> rel($outPut) -> e();
+		}
+
+		$discount = $discount[key($discount)];
+		$outPut['price'] = round($outPut['price'] * $get['count'] * $discount['discount'], 2);
+		$this -> rel($outPut) -> e();
 	}
 
 	/**
