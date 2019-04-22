@@ -71,7 +71,7 @@ class IndexController extends CommonController {
 		if(!$info) { // 上传错误提示错误信息
 			return '';
 		}
-		return $info['savepath'] . $info['savename'];
+		return ltrim($upload -> rootPath . $info['savepath'] . $info['savename'], '.');
 	}
 
 	/**
