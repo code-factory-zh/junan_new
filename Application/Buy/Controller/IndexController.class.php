@@ -26,6 +26,13 @@ class IndexController extends CommonController{
 		$this -> discount = new \Manage\Model\DiscountModel;
 	}
 
+	public function temp() {
+
+		$this -> _get($p, ['account_id']);
+		$done = M('exam_member') -> data(['is_pass_exam' => 0]) -> where(['account_id' => $p['account_id']]) -> save();
+		du($done);
+	}
+
 	/**
 	 * 购买课程主页
 	 * @Author   邱湘城
@@ -288,6 +295,10 @@ class IndexController extends CommonController{
 			'updated_time' => $time,
 			'status' => 0,
 		];
+
+		if (!empty($p['pic'])) {
+			$insertAccount['pic'] = $p['pic'];
+		}
 
 		if (isset($p['date'])) {
 			$insertAccount['join_date'] = strtotime($p['date']);

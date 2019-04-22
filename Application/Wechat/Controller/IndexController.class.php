@@ -43,17 +43,18 @@ class IndexController extends CommonController {
 	 */
 	public function uploadImg() {
 
-		if (is_null($_FILE)) {
+		$this -> ignore_token();
+		if (is_null($_FILES)) {
 			$this -> e('没有检测到图片文件！');
 		}
 
-		$file = $_FILE['file'];
-		$res = $this -> saveFile($res);
+		$file = $_FILES['file'];
+		$res = $this -> saveFile($file);
 		if ($res == '') {
 			$this -> e('上传失败，请确保form表单的文件域name名称为 file');
 		}
 
-		$this -> rel($res) -> e();
+		$this -> rel(['filepath' => $res]) -> e(0);
 	}
 
 	// 保存上传的图片
