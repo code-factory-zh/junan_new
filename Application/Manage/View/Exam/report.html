@@ -6,7 +6,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+      <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+      <meta HTTP-EQUIV="Cache-Control" CONTENT="no-store, must-revalidate">
+      <meta HTTP-EQUIV="expires" CONTENT="0">
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
     <title>后台管理系统</title>
 
     <!-- Bootstrap -->
@@ -51,34 +54,56 @@
         <!-- /顶部导航栏 -->
 
         <!-- 页面内容 -->
-        <div class="right_col" role="main">
-          <div id="course_list">
-              <a href="/manage/exam/edit"><button class="btn btn-success btn-sm fr" id="add_course">新增考试</button></a>
-              <table class="full_width_table">
-                 <thead>
-                   <tr>
-                     <th>试题名称</th>
-                     <th>考试时长</th>
-                     <th>题目数</th>
-                     <th>对应课程</th>
-                     <th>操作</th>
-                   </tr>
-                 </thead>
-                 <foreach name="list" item="v">
-                     <tr>
-                        <td>{$v.name}</td>
-                        <td>{$v.time}</td>
-                        <td>{$v.total_exam_amount}</td>
-                        <td>{$v.course_name}</td>
-                        <td class="btn_div">
-                            <a href="/manage/exam/edit?id={$v.id}"><button class="btn btn-success btn-sm">编辑</button></a>
-                            <a href="/manage/exam/mlist?course_id={$v.course_id}"><button class="btn btn-success btn-sm">考生列表</button></a>
-                            <button class="btn btn-danger btn-sm del" idvalue="{$v.id}">删除</button>
-                        </td>
-                      </tr>
-                  </foreach>
-               </table>
+        <div class="right_col" role="main" style="background:#fff;">
+            <!--startprint-->
+          <div class="test_paper_wrap">
+              <div class="title" id="title"><img onclick="printIt()" src="/static/assets/images/print.png" alt=""><span></span></div>
+              <div class="personInfo">
+                  <p class="name" id="name">答题人：<span></span></p>
+                  <p class="other">身份证：<span id="idcard"></span></p>
+                  <p class="other" style="left:504px;">电话：<span id="phone"></span></p>
+              </div>
+              <div class="scoreInfoTitle">成绩单</div>
+              <div class="scoreInfo">
+                  <div class="img img1"></div>
+                  <div class="info">
+                      <div>您的得分：<span id="num1"></span></div>
+                      <div>问卷满分：<span id="num2"></span></div>
+                  </div>
+                  <div class="img img2"></div>
+                  <div class="info">
+                      <div>答对题数：<span id="num3"></span></div>
+                      <div>测试题数：<span id="num4"></span></div>
+                  </div>
+                  <div class="img img3"></div>
+                  <div class="info">
+                      <div>您的名次：<span id="num5"></span></div>
+                      <div>参与人数：<span id="num6"></span></div>
+                  </div>
+              </div>
+              <div class="scoreInfoTitle">答案解析</div>
+              <div class="paper_content">
+                  <!--<div class="item">-->
+                      <!--<div class="ask">-->
+                          <!--1、安全教育培训的目的是提高安全教育培训的目的是提高安全教育培训的目的是提高安全教育培训的目的是提高安全教育培训的目的是提高安全教育培训的目的是提高-->
+                      <!--</div>-->
+                      <!--<div class="score_amount">【分值：2】</div>-->
+                      <!--<div class="answers">-->
+                          <!--<div class="every">A.事不关己事不关己事不关己事不关己事不关己事不关己事不关己事不关己，</div>-->
+                          <!--<div class="every">B.事不关己，高高挂起</div>-->
+                          <!--<div class="every">C.事不关己，高高挂起</div>-->
+                          <!--<div class="every">D.事不关己，高高挂起</div>-->
+                      <!--</div>-->
+                      <!--<div class="result">-->
+                          <!--<span class="rightAnswer">正确答案：D</span>-->
+                          <!--<span class="yourAnswer"><img src="/static/assets/images/right.png" alt="">您的回答：D</span>-->
+                          <!--<span class="getScore">（得分：<i>2</i>）</span>-->
+                      <!--</div>-->
+                      <!--<div class="line"></div>-->
+                  <!--</div>-->
+              </div>
           </div>
+            <!--endprint-->
         </div>
         <!-- /页面内容 -->
 
@@ -105,28 +130,7 @@
     <!-- Custom Theme Scripts -->
     <script src="/static/build/js/custom.js"></script>
 
-    <script>
-        $(".del").click(function () {
-            if(confirm("确认删除?") == true){
-                id = $(this).attr('idvalue');
-
-                $.ajax({
-                    url: '/manage/exam/del',
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: {"id":id},
-                    success: function (e) {
-                        if (e.code != 0) {
-                            alert(e.msg)
-                        } else {
-                            window.location.href = '/manage/exam';
-                        }
-                    }
-                })
-            }
-            return false
-        })
-    </script>
+    <script src="/static/build/js/report.js"></script>
 
   </body>
 </html>
