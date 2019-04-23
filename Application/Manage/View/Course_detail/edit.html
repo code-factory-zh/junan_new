@@ -88,11 +88,12 @@
                     </div>
 
                     <div class="form-group toggleShow" <if condition="$record.id != '' && $record.type != 1">style="display:none"</if>>
-                    <label for="content" class="control-label col-md-3 col-sm-3 col-xs-12">详细内容</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">详细内容</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea name="content" id="content">{$record.content}</textarea>
                     </div>
             </div>
+            <input type="hidden" name="filePath" id="filePath">
             <input type="hidden" name="course_id" value="{$course_id}">
             <input type="hidden" name="id" value="{$record.id}">
             <!--<input type="hidden" id="content" name="content" value="{$record.content}">-->
@@ -169,6 +170,8 @@
     }
     $("#form").submit(function () {
         var course_id = $('input[name="course_id"]').val();
+        var params = $(this).serialize()
+        console.log(params)
         $.ajax({
             url: $(this).attr('action'),
             type: 'POST',
