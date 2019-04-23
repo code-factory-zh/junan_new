@@ -66,10 +66,14 @@ class CourseDetailController extends CommonController
 			$p = I('post.');
 
             if ($p['type'] != 1) {
-                if (empty($p['content'])) {
+                if (empty($p['filePath'])) {
                     $this->e('请上传文件');
-                }
+                }else{
+					$p['content'] = $p['filePath'];
+				}
                 $p['detail'] = '';
+
+				unset($p['filePath']);
 
                 $ext = substr(strrchr($p['content'], '.'), 1);
 
