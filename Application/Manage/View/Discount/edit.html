@@ -112,8 +112,6 @@
     <script src="/static/build/js/course_add_edit.js"></script>
 
     <script>
-      var ue = UE.getEditor('editor');
-
         $("#form").submit(function () {
 
             $.ajax({
@@ -125,7 +123,7 @@
                     if (e.code != 0) {
                         alert(e.msg)
                     } else {
-                        window.location.href = '/manage/discount';
+                        window.location.href = '/manage/discount/index';
                     }
                 }
             })
