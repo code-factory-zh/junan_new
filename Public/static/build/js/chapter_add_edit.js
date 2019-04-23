@@ -82,7 +82,7 @@ $(function(){
             alert(response.msg);
             return false;
         }
-        $('#content').val(response.name);
+        $('#filePath').val(response.name);
         $( '#'+file.id ).find('p.state').text('已上传');
         uploader.removeFile(file);
     });
