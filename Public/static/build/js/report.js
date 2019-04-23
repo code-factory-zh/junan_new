@@ -22,7 +22,7 @@ function judgeGetAnswer (answer, options) {
     return options[answer];
 }
 function getPaper(){
-    $.get("http://course.junan.com/manage/exam/score_report?exam_question_id=" + exam_question_id, function(res,status){
+    $.get("http://course.joinersafe.com/manage/exam2/score_report?exam_question_id=" + exam_question_id, function(res,status){
         if ('success' == status) {
             if (res.code === 0) {
                 $('#title span').html(res.data.exam_detail.couse_name);
