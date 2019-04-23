@@ -73,8 +73,6 @@ class CourseDetailController extends CommonController
 				}
                 $p['detail'] = '';
 
-				unset($p['filePath']);
-
                 $ext = substr(strrchr($p['content'], '.'), 1);
 
                 if ($p['type'] == 2 && !in_array($ext, ['ppt', 'pptx'])) {
@@ -83,6 +81,8 @@ class CourseDetailController extends CommonController
                     $this->e('文件必须是视频');
                 }
             }
+
+			unset($p['filePath']);
 
             $id = I('post.id');
             if (!empty($id)) {
