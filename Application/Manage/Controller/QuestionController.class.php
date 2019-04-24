@@ -646,7 +646,7 @@ class QuestionController extends CommonController
 			$answer_json_arr = explode(',', $strs[3]);
 			$answer_arr = [];
 			foreach($answer_json_arr as $answer_json_k => $answer_json_v){
-				$answer_arr[] = $answer_letter_num_arr[$answer_json_v];
+				$answer_arr[] = (string)$answer_letter_num_arr[$answer_json_v];
 			}
 			$d["answer"] = json_encode($answer_arr);
 
