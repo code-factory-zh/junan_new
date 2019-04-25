@@ -93,7 +93,7 @@ class Exam2Controller extends CommonController {
 				$my_answer = implode('', json_decode($e_v['answer_id'], true));
 			}else{
 				$answer = $e_v['answer'];
-				$my_answer = $e_v['answer'];
+				$my_answer = $e_v['answer_id'];
 			}
 
 			$answer_explain_result[] = [
