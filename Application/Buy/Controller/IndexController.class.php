@@ -284,11 +284,12 @@ class IndexController extends CommonController{
 
 		$outPut = ['price' => $get['price']];
 		if (is_null($discount) || !count($discount)) {
-			$this -> rel($outPut) -> e();
+			$discount = 1;
+		} else {
+			$discount = $discount[key($discount)]['discount'];
 		}
+		$outPut['price'] = round(($outPut['price'] * intval($get['count'])) * $discount, 2);
 
-		$discount = $discount[key($discount)];
-		$outPut['price'] = round($outPut['price'] * $get['count'] * $discount['discount'], 2);
 		$this -> rel($outPut) -> e();
 	}
 
@@ -335,6 +336,10 @@ class IndexController extends CommonController{
 		if (!$uid) {
 			$this -> e($err);
 		}
+
+		// 更新该企业可邀请人数
+		$this -> user -> diffStuAmount($get['company_id']);
+
 		$this -> rel(['uid' => $uid]) -> e();
 	}
 
@@ -364,7 +369,7 @@ class IndexController extends CommonController{
 
 		$data = $this -> get_open_id($p['code']);
 		if (!isset($data['openid'])) {
-			$this -> e('失败，微信返回 errorcode：' . $data['errcode']);
+			$this -> e(2, '失败，微信返回 errorcode：' . $data['errcode']);
 		}
 
 		$this -> rel(['open_id' => $data['openid']]) -> e();
@@ -437,15 +442,15 @@ class IndexController extends CommonController{
 
 		$this -> _get($p, ['open_id']);
 
-		$data = $this -> user -> getCompanyByWhere(['open_id' => $p['open_id']], 'id,open_id');
+		$data = $this -> user -> getCompanyByWhere(['id' => $this -> ufo['id']], 'id,open_id');
 		if (is_null($data)) {
 			$this -> e('不合法的open_id');
 		}
 
 		$token = $this -> getAccessTokenXcx();
 		$url = 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' . $token;
-		
-		$params = ['scene' => "company_id={$data['id']}", 'width' => 430];
+
+		$params = ['scene' => "company_id={$this -> ufo['id']}", 'width' => 430];
 		if (isset($p['page'])) {
 			$params['page'] = $p['page'];
 		}
