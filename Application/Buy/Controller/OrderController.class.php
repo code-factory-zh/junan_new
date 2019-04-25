@@ -74,9 +74,9 @@ class OrderController extends CommonController{
 		$this -> _get($p, ['open_id', 'pay_type' => '支付方式', 'count' => '请输入课程数量', 'unit_price' => '请输入课程单价', 'total_price' => '请输入课程总价']);
 		$this -> isInt(['count', 'unit_price', 'total_price']);
 
-		if ($p['count'] * $p['unit_price'] != $p['total_price']) {
-			$this -> e('您的订单价格有误！');
-		}
+		// if ($p['count'] * $p['unit_price'] != $p['total_price']) {
+		// 	$this -> e('您的订单价格有误！');
+		// }
 
 		// 生成内部预付订单
 		$time = time();

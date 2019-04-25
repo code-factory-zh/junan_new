@@ -58,6 +58,17 @@ class UserModel extends BaseModel {
 	}
 
 	/**
+	 * 减去当前企业可注册人数
+	 * @Author   邱湘城
+	 * @DateTime 2019-04-26T01:07:56+0800
+	 */
+	public function diffStuAmount($companyId, $amount = 1) {
+
+		$sql = "UPDATE {$tableName} c SET c.stu_amount = c.stu_amount - {$amount} WHERE c.id = {$companyId}";
+		return $this -> execute($sql);
+	}
+
+	/**
 	 * 检查当前用户是否存在
 	 * @Author   邱湘城
 	 * @DateTime 2019-03-31T14:14:43+0800
