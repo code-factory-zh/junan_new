@@ -300,7 +300,7 @@ class IndexController extends CommonController{
 	 */
 	public function appRegister() {
 
-		$this -> _post($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
+		$this -> _get($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
 
 		$company = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
 		if (is_null($company) || !count($company)) {
@@ -334,11 +334,11 @@ class IndexController extends CommonController{
 
 		$uid = $this -> account -> saveAccount($insertAccount);
 		if (!$uid) {
-			$this -> e($err);
+			$this -> e('您的帐号已经注册过该企业！');
 		}
 
 		// 更新该企业可邀请人数
-		$this -> user -> diffStuAmount($get['company_id']);
+		$this -> user -> diffStuAmount($p['company_id']);
 
 		$this -> rel(['uid' => $uid]) -> e();
 	}
