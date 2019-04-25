@@ -73,8 +73,6 @@ class CourseDetailController extends CommonController
 				}
                 $p['detail'] = '';
 
-				unset($p['filePath']);
-
                 $ext = substr(strrchr($p['content'], '.'), 1);
 
                 if ($p['type'] == 2 && !in_array($ext, ['ppt', 'pptx'])) {
@@ -84,9 +82,11 @@ class CourseDetailController extends CommonController
                 }
             }
 
+			unset($p['filePath']);
+
             $id = I('post.id');
             if (!empty($id)) {
-                $exist = $this -> courseDetail -> getDetail('sort = ' . $p['sort'] . ' and course_id = ' . $p['course_id'] . ' and id != ' . $id);
+                $exist = $this -> courseDetail -> getDetail('sort = ' . $p['sort'] . ' and is_deleted = 0 and course_id = ' . $p['course_id'] . ' and id != ' . $id);
                 if ($exist) {
                     $this -> e('章节[' . $p['sort'] . ']已存在');
                 }
@@ -98,7 +98,7 @@ class CourseDetailController extends CommonController
                 $this -> e();
             } else {
                 //查询章节是否已存在
-                $exist = $this -> courseDetail -> getDetail('sort = ' . $p['sort'] . ' and course_id = ' . $p['course_id']);
+                $exist = $this -> courseDetail -> getDetail('sort = ' . $p['sort'] . ' and is_deleted = 0 and course_id = ' . $p['course_id']);
                 if (!empty($exist)) {
                     $this -> e('章节[' . $p['sort'] . ']已存在');
                 }
