@@ -54,7 +54,8 @@
 
         <!-- 页面内容 -->
         <div class="right_col" role="main">
-            <div id="add_edit_course">
+              <a href="javascript:history.go(-1);"><button class="btn btn-success btn-sm fl" id="add_course"><< 返回列表</button></a>
+            <div id="add_edit_course" style="clear:both">
                 <h3 class="title"><if condition="$record.id == ''">新增<else/>修改</if>章节</h3>
                 <form action="" method="post" class="form-horizontal form-label-left" id="form">
                     <div class="form-group">
