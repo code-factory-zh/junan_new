@@ -64,7 +64,7 @@ class UserModel extends BaseModel {
 	 */
 	public function diffStuAmount($companyId, $amount = 1) {
 
-		$sql = "UPDATE {$tableName} c SET c.stu_amount = c.stu_amount - {$amount} WHERE c.id = {$companyId}";
+		$sql = "UPDATE {$this -> tableName} c SET c.stu_amount = c.stu_amount - {$amount} WHERE c.id = {$companyId}";
 		return $this -> execute($sql);
 	}
 
