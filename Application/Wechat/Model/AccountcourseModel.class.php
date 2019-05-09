@@ -35,9 +35,9 @@ class AccountcourseModel extends CommonModel {
 
 
         $sql = "SELECT c.id, c.id course_id, c.name, c.price, c.detail,
-        (SELECT COUNT(*) FROM course_detail cd WHERE cd.course_id = c.id) total_chapter,
+        (SELECT COUNT(*) FROM course_detail cd WHERE cd.course_id = c.id AND cd.is_deleted = 0) total_chapter,
         (SELECT em.is_pass_exam FROM exam_member em WHERE em.account_id = {$account_id} AND em.course_id = c.id AND em.is_pass_exam = 1) is_pass_exam,
-        (SELECT COUNT(*) FROM company_account_course_chapter cacc WHERE cacc.status = 0 and cacc.account_id = {$account_id} AND cacc.course_id = c.id) studied
+        (SELECT COUNT(*) FROM company_account_course_chapter cacc JOIN course_detail cdx ON cdx.id = cacc.chapter_id WHERE cdx.is_deleted = 0 AND cacc.status = 0 and cacc.account_id = {$account_id} AND cacc.course_id = c.id) studied
         FROM course c
         WHERE c.is_deleted = 0";
         return $this -> query($sql);
