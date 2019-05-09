@@ -54,6 +54,7 @@
         <!-- /顶部导航栏 -->
 
         <!-- 页面内容 -->
+
         <div class="right_col" role="main" style="background:#fff;">
             <!--startprint-->
           <div class="test_paper_wrap">
@@ -102,6 +103,37 @@
                       <!--<div class="line"></div>-->
                   <!--</div>-->
               </div>
+
+        <!-- <div class="right_col" role="main">
+          <a href="javascript:history.go(-1);"><button class="btn btn-success btn-sm fl" id="add_course"><< 返回列表</button></a>
+          <div id="course_list" style="clear:both">
+              <a href="javascript:history.go(-1);"><button class="btn btn-success btn-sm fl" id="add_course"><< 返回列表</button></a>
+              <a href="/manage/exam/edit"><button class="btn btn-success btn-sm fr" id="add_course">新增考试</button></a>
+              <table class="full_width_table">
+                 <thead>
+                   <tr>
+                     <th>试题名称</th>
+                     <th>考试时长</th>
+                     <th>题目数</th>
+                     <th>对应课程</th>
+                     <th>操作</th>
+                   </tr>
+                 </thead>
+                 <foreach name="list" item="v">
+                     <tr>
+                        <td>{$v.name}</td>
+                        <td>{$v.time}</td>
+                        <td>{$v.total_exam_amount}</td>
+                        <td>{$v.course_name}</td>
+                        <td class="btn_div">
+                            <a href="/manage/exam/edit?id={$v.id}"><button class="btn btn-success btn-sm">编辑</button></a>
+                            <a href="/manage/exam/mlist?course_id={$v.course_id}"><button class="btn btn-success btn-sm">考生列表</button></a>
+                            <button class="btn btn-danger btn-sm del" idvalue="{$v.id}">删除</button>
+                        </td>
+                      </tr>
+                  </foreach>
+               </table> -->
+
           </div>
             <!--endprint-->
         </div>
