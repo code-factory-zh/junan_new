@@ -194,6 +194,70 @@ class CompanyController extends CommonController
 		$this -> display('Account/list');
 	}
 
+	/**
+	 * 导出数据
+	 * @author cuirj
+	 * @date   2019/5/10 下午3:43
+	 * @method get
+	 *
+	 * @param  int param
+	 */
+	public function import_data(){
+		$params = I('get.');
+		$where = '1=1';
+		$industry = $params['type'];
+		$address = $params['address'];
+
+		if($industry){
+			$where .= ' and industry='.$industry;
+		}
+
+		if($address){
+			$where .= ' and address like "%' . $address . '%"';
+		}
+		$companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time');
+
+		//取行业类型
+		$industry = [
+			1 => '冶金行业',
+			2 => '有色行业',
+			3 => '建材行业',
+			4 => '机械行业',
+			5 => '轻工行业',
+			6 => '纺织行业',
+			7 => '烟草行业',
+		];
+
+		$company_export = [];
+		foreach($companys as $k => $v){
+			$company_export[] = [
+				'id' => $v['id'],
+				'code' => $v['code'],
+				'company_name' => $v['company_name'],
+				'created_time' => date('Y-m-d H:i:s', $v['created_time']),
+				'status' => $v['status'] ? '禁用' : '激活',
+				'credit_code' => $v['credit_code'],
+				'industry' => $industry[$v['credit_code']],
+				'address' => $v['province'] . $v['city'] . $v['address'],
+				'active_time' => date('Y-m-d H:i:s', $v['active_time']),
+			];
+		}
+
+		$xlsCell = array(
+			array('id', 'ID'),
+			array('code', '企业账号'),
+			array('company_name', '真实姓名'),
+			array('created_time', '添加时间'),
+			array('status', '激活状态'),
+			array('credit_code', '企业信用代码'),
+			array('industry', '行业类型'),
+			array('address', '地址'),
+			array('active_time', '账户有效期'),
+		);
+
+		$this->exportExcel('my_name',$xlsCell,$company_export);
+	}
+
     /**
      * 用户登录
      * @param md5 ($verify)
