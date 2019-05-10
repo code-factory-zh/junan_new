@@ -255,7 +255,7 @@ class CompanyController extends CommonController
 			array('active_time', '账户有效期'),
 		);
 
-		$this->exportExcel('my_name',$xlsCell,$company_export);
+		$this->exportExcel('接入公司',$xlsCell,$company_export);
 	}
 
     /**
