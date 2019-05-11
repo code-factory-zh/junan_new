@@ -44,6 +44,11 @@ class OrderController extends CommonController {
 
 		$courses = $this->order->getOrderList($where);
 
+		$data['param'] = [
+			'begin_time' => $begin_time,
+			'end_time' => $end_time,
+		];
+
 		$data['list'] = $courses;
 		$this->assign($data);
 		$this->display();

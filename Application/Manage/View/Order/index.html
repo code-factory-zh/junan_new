@@ -55,9 +55,9 @@
         <!-- 页面内容 -->
         <div class="right_col" role="main">
             <div style="margin-bottom: 10px;">
-                <input id="select_date_begin" type="text" placeholder="请选择日期">
+                <input id="select_date_begin" value="{$param['begin_time']}" type="text" placeholder="请选择日期">
                 <span>-</span>
-                <input id="select_date_end" type="text" placeholder="请选择日期">
+                <input id="select_date_end" type="text" value="{$param['end_time']}" placeholder="请选择日期">
                 <button type="button" class="btn-sm btn-success" style="height:28px;line-height:28px;padding:0 10px;margin:0 0 0 5px;" onclick="search()">搜索</button>
                 <button type="button" class="btn-sm btn-success" style="height:28px;line-height:28px;padding:0 10px;margin:0 0 0 5px;" onclick="import_data()">导出</button>
             </div>
