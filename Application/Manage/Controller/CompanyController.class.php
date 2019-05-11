@@ -45,9 +45,24 @@ class CompanyController extends CommonController
 		$where = '1=1';
 		$industry = $params['type'];
 		$address = $params['address'];
+		$province = $params['province'];
+		$city = $params['city'];
+		$county = $params['county'];
 
 		if($industry){
 			$where .= ' and industry='.$industry;
+		}
+
+		if($province && $province != '-'){
+			$where .= ' and province="' . $province . '"';
+		}
+
+		if($city && $city != '-'){
+			$where .= ' and city="' . $city . '"';
+		}
+
+		if($county && $county != '-'){
+			$where .= ' and county="' . $county . '"';
 		}
 
 		if($address){
@@ -69,7 +84,10 @@ class CompanyController extends CommonController
 		$data['cond'] = [
 			'type' => $industry,
 			'address' => $address,
-			'current_time' => time()
+			'province' => $province,
+			'city' => $city,
+			'county' => $county,
+			'current_time' => time(),
 		];
 
         $data['list'] = $companys;
@@ -207,9 +225,24 @@ class CompanyController extends CommonController
 		$where = '1=1';
 		$industry = $params['type'];
 		$address = $params['address'];
+		$province = $params['province'];
+		$city = $params['city'];
+		$county = $params['county'];
 
 		if($industry){
 			$where .= ' and industry='.$industry;
+		}
+
+		if($province && $province != '-'){
+			$where .= ' and province="' . $province . '"';
+		}
+
+		if($city && $city != '-'){
+			$where .= ' and city="' . $city . '"';
+		}
+
+		if($county && $county != '-'){
+			$where .= ' and county="' . $county . '"';
 		}
 
 		if($address){

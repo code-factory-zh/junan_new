@@ -29,7 +29,20 @@ class OrderController extends CommonController {
 	 * @return  array
 	 */
 	public function index() {
-		$courses = $this->order->getOrderList();
+		$params = I('get.');
+		$where = '1=1';
+		$begin_time = $params['begin_time'];
+		$end_time = $params['end_time'];
+
+		if($begin_time){
+			$where .= ' and o.created_time > '. strtotime($begin_time);
+		}
+
+		if($end_time ){
+			$where .= ' and o.created_time < ' . strtotime($end_time);
+		}
+
+		$courses = $this->order->getOrderList($where);
 
 		$data['list'] = $courses;
 		$this->assign($data);
@@ -77,21 +90,20 @@ class OrderController extends CommonController {
 	 * @date   2019/5/10 下午4:45
 	 */
 	public function import_data(){
-//		$params = I('get.');
-//		$where = '1=1';
-//		$industry = $params['type'];
-//		$address = $params['address'];
-//
-//		if($industry){
-//			$where .= ' and industry='.$industry;
-//		}
-//
-//		if($address){
-//			$where .= ' and address like "%' . $address . '%"';
-//		}
+		$params = I('get.');
+		$where = '1=1';
+		$begin_time = $params['begin_time'];
+		$end_time = $params['end_time'];
 
-		$courses = $this->order->getOrderList();
+		if($begin_time){
+			$where .= ' and o.created_time > '. strtotime($begin_time);
+		}
 
+		if($end_time ){
+			$where .= ' and o.created_time < ' . strtotime($end_time);
+		}
+
+		$courses = $this->order->getOrderList($where);
 
 		//付款类型
 		$pay_type = [

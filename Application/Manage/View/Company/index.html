@@ -53,15 +53,24 @@
         <!-- 页面内容 -->
         <div class="right_col" role="main">
             <div class="dropdown">
-                <input type="text" value="{$cond.address}" id='address_s' name="address_s" placeholder="请输入要查询的地址">
-                <select id="type_s" name="course_id">
+                <select name="province" id="province" style="height:28px;margin-right:5px;" onchange="changeProvince()">
+                    <option value="-">请选择省份</option>
+                </select>
+                <select name="city" id="city" style="height:28px;margin-right:5px;" onchange="changeCity()">
+                    <option value="-">请选择城市</option>
+                </select>
+                <select name="county" id="county" style="height:28px;margin-right:5px;">
+                    <option value="-">请选择区县</option>
+                </select>
+                <input type="text" style="height: 28px;width:190px;margin-right:5px;" value="{$cond.address}" id='address_s' name="address_s" placeholder="请输入要查询的地址">
+                <select id="type_s" name="course_id" style="height:28px;margin-right:5px;">
                     <option value="">请选择行业类型</option>
                     <foreach name="industry" key="i_k" item="i_v">
                         <option value="{$i_k}" <if condition="$cond.type == $i_k">selected</if>>{$i_v}</option>
                     </foreach>
                 </select>
                 <button class="btn btn-success btn-sm dropdown-toggle search" data-toggle="dropdown" id="search">查询</button>
-                <button class="btn btn-success btn-sm dropdown-toggle search" data-toggle="dropdown" >导出</button>
+                <button class="btn btn-success btn-sm dropdown-toggle import" data-toggle="dropdown" id="import">导出</button>
             </div>
 
           <div id="course_list">
@@ -118,6 +127,8 @@
 
  <!-- jQuery -->
  <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+  <!--城市列表-->
+  <script src="/static/assets/js/jquery.area.js"></script>
  <!-- Bootstrap -->
  <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
  <!-- FastClick -->
@@ -150,8 +161,11 @@
       $("#search").click(function () {
           address = $('#address_s').val();
           type = $('#type_s').val();
+          province_s = $('#province').val();
+          city_s = $('#city').val();
+          county_s = $('#county').val();
 
-          window.location.href = '/manage/company/?address='+address+'&type='+type;
+          window.location.href = '/manage/company/?address='+address+'&type='+type+'&province='+province_s+'&city='+city_s+'&county='+county_s;
 //          $.ajax({
 //              url: '/manage/company/index/',
 //              type: 'get',
@@ -167,6 +181,87 @@
 //          })
 //          return false
       })
+
+      // 导出功能
+      $("#import").click(function () {
+          address = $('#address_s').val();
+          type = $('#type_s').val();
+          province_s = $('#province').val();
+          city_s = $('#city').val();
+          county_s = $('#county').val();
+
+          window.location.href = '/manage/company/import_data/?address='+address+'&type='+type+'&province='+province_s+'&city='+city_s+'&county='+county_s;
+//          $.ajax({
+//              url: '/manage/company/index/',
+//              type: 'get',
+//              dataType: 'JSON',
+//              data: {"status":status, "id":id},
+//              success: function (e) {
+//                  if (e.code != 0) {
+//                      alert(e.msg)
+//                  } else {
+//                      window.location.href = '/manage/company';
+//                  }
+//              }
+//          })
+//          return false
+      })
+        // 城市列表筛选功能
+      var provinceHtml = "<option value='-'>请选择省份</option>"
+      var cityHtml = "<option value='-'>请选择城市</option>"
+      var countyHtml = "<option value='-'>请选择区县</option>"
+      for(var i = 0; i < province.length; i++) {
+            provinceHtml += "<option value='"+province[i]+"'>"+province[i]+"</option>"
+      }
+        $('#province').html(provinceHtml)
+      // 当前选中的省份下标
+      var provinceIndex = ''
+      var cityIndex= ''
+        // 切换省份
+        function changeProvince(){
+            console.log($('#province').val())
+            var provinceName = $('#province').val()
+            if (provinceName == '-') {
+                $('#city').html(cityHtml)
+                $('#county').html(countyHtml)
+            } else {
+                // 找到省份的下标
+                for(var i = 0; i < province.length; i++) {
+                    if (province[i] == provinceName) {
+                        provinceIndex = i
+                        break
+                    }
+                }
+                // 城市筛选列表赋值
+                for (var i = 0; i < city[provinceIndex].length; i++) {
+                    cityHtml += "<option value='"+city[provinceIndex][i]+"'>"+city[provinceIndex][i]+"</option>"
+                }
+                $('#city').html(cityHtml)
+                $('#county').html(countyHtml)
+            }
+        }
+        // 切换城市
+        function changeCity(){
+            console.log($('#city').val())
+            var cityName = $('#city').val()
+            if (cityName == '-') {
+                $('#county').html(countyHtml)
+            } else {
+                // 已知provinceIndex,获得cityIndex
+                for (var i = 0; i < city[provinceIndex].length; i++) {
+                    if (city[provinceIndex][i] == cityName) {
+                        console.log('city下标' + i)
+                        cityIndex = i
+                        break
+                    }
+                }
+                // 区县筛选列表赋值
+                for (var i = 0; i < district[provinceIndex][cityIndex].length; i++) {
+                    countyHtml += "<option value='"+district[provinceIndex][cityIndex][i]+"'>"+district[provinceIndex][cityIndex][i]+"</option>"
+                }
+                $('#county').html(countyHtml)
+            }
+        }
     </script>
   </body>
 </html>
