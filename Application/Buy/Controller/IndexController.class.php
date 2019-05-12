@@ -65,6 +65,10 @@ class IndexController extends CommonController{
 		}
 
 		$data['course_list'] = $this -> course -> getCourseList(['is_deleted' => 0], 2);
+		foreach ($data['course_list'] as &$items) {
+			$items['detail'] = '简介：' . $items['detail'];
+		}
+
 		$data['history_list']['buy_amount']    = $company['stu_amount'];
 		$data['history_list']['learn_amount']  = $this -> account -> getAccountInfoCount(['company_id' => $this -> ufo['id'], 'status' => 0]);
 		$data['history_list']['examed_amount'] = 0;

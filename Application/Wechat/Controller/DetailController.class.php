@@ -39,9 +39,20 @@ class DetailController extends CommonController {
 
 		// 取章节目录
 		$where['cd.course_id'] = ['in', $ids];
-		$list = $this -> account_course -> getCourseList($where, 'cd.id, c.id course_id, c.type course_type, c.name course_name, cd.type, cd.sort num, cd.chapter chapter_name');
+		$list = $this -> account_course -> getCourseList($where, 'cd.id, c.id course_id, c.detail course_detail, c.type course_type, c.name course_name, cd.type, cd.sort num, cd.chapter chapter_name');
 		if (!count($list)) {
 			$this -> e('没有章节数据！');
+		}
+
+
+		// 取得所有已学习的课程
+		$where = ['account_id' => $this -> u['id'], 'status' => 0];
+		$courseStudied = $this -> account_course -> getCourseListFull($where);
+		$filter = [];
+		if (!is_null($courseStudied) && count($courseStudied)) {
+			foreach ($courseStudied as $values) {
+				$filter[$values['course_id']][] = $values['chapter_id'];
+			}
 		}
 
 		$detail = [];
@@ -50,9 +61,12 @@ class DetailController extends CommonController {
 			if (!count($detail) && $items['course_type'] == 0) {
 				$detail = $items;
 			}
+			$items['studied'] = 0;
+			if (isset($filter[$items['course_id']]) && in_array($items['id'], $filter[$items['course_id']])) {
+				$items['studied'] = 1;
+			}
 			$items['num'] = $items['course_name'] . '·' . $items['num'];
 		}
-
 
 		// 默认取第一条数据
 		$fields = ['cd.id', 'cd.course_id', 'c.detail course_detail', 'c.name course_name', 'cd.chapter chapter_name', 'cd.type', 'cd.content'];
@@ -60,6 +74,7 @@ class DetailController extends CommonController {
 		if (!$data || !count($data)) {
 			$this -> e('没有章节数据！');
 		}
+
 
 		$this -> rel(['detail' => $detail, 'list' => $list]) -> e();
 	}
