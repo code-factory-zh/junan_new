@@ -192,12 +192,17 @@ class IndexController extends CommonController{
 		];
 
 		$this -> _post($p, $needle);
-		$this -> lenCheck('pwd', 6);
-		$this -> lenCheck('very_pwd', 6);
-		$this -> lenCheck('code', 6);
+
+		if (!preg_match("/^[\w\d]{6,}/i", $p['code'])) {
+			$this -> e('用户名必须是英文+数字的组合，且不得少于6个字。');
+		}
+
+		if (!preg_match("/^[\w\d\\_]{6,}/i", $p['pwd'])) {
+			$this -> e('密码必须是英文、数字或_符号的组合，且不得少于6个字。');
+		}
 
 		if ($p['pwd'] != $p['very_pwd']) {
-			$this -> e('输入的两次密码不一样！');
+			$this -> e('两次输入的密码不一样！');
 		}
 
 		$p['password'] = $this -> _encrypt($p['pwd']);
