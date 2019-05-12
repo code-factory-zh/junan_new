@@ -42,7 +42,7 @@ class OrderController extends CommonController {
 			$where .= ' and o.created_time < ' . strtotime($end_time);
 		}
 
-		$page = I('page');
+		$page = I('p');
 
 		$limit = pageLimit($page);
 
@@ -54,8 +54,9 @@ class OrderController extends CommonController {
 		];
 
 		$data['list'] = $courses['list'];
-		$data['page'] = page($courses['count'], $page);
-		$data['page_index'] = I('page') ? I('page') : 1;
+//		$data['page'] = page($courses['count'], $page);
+		$page = new \Think\Page($courses['count'], 10);
+		$data['page'] = $page->show();
 		$this->assign($data);
 		$this->display();
 	}

@@ -52,7 +52,7 @@ class QuestionController extends CommonController
 		//        $params = $this->_get($_GET);
 		$params = I('get.');
 
-		$page = I('page');
+		$page = I('p');
 
 		$limit = pageLimit($page, 10);
 
@@ -111,7 +111,8 @@ class QuestionController extends CommonController
 			}
 		}
 
-		$data['page'] = page($list['count'], $page);
+		$page_show = new \Think\Page($list['count'], 10);;
+		$data['page'] = $page_show->show();
 		$this->assign(['data' => $list['list']]);
 		$this->assign(['page' => $data['page']]);
 		$this->display('Question/index');
