@@ -300,7 +300,7 @@ class IndexController extends CommonController{
 	 */
 	public function appRegister() {
 
-		$this -> _get($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
+		$this -> _post($p, ['company_id', 'uname', 'card_num', 'mobile', 'open_id']);
 
 		$company = $this -> user -> getCompanyByWhere(['id' => $p['company_id']], 'id,company_name');
 		if (is_null($company) || !count($company)) {
