@@ -225,9 +225,15 @@ class IndexController extends CommonController{
 	 */
 	public function login() {
 
-		$this -> _post($p, ['code' => '帐号', 'pwd' => '密码', 'open_id']);
-		$this -> lenCheck('code', 5);
-		$this -> lenCheck('pwd', 6);
+		$this -> _get($p, ['code' => '帐号', 'pwd' => '密码', 'open_id']);
+
+		if (!preg_match("/^[\w\d]{6,}/i", $p['code'])) {
+			$this -> e('用户名必须是英文+数字的组合，且不得少于6个字。');
+		}
+
+		if (!preg_match("/^[\w\d\\_]{6,}/i", $p['pwd'])) {
+			$this -> e('密码必须是英文、数字或_符号的组合，且不得少于6个字。');
+		}
 
 		$err = $this -> user -> login_very($p);
 		if ($err === -1) {
@@ -235,7 +241,7 @@ class IndexController extends CommonController{
 		}
 
 		if (!$err) {
-			$this -> e('登录失败！');
+			$this -> e('登录失败，请确认您的帐号信息是否正确！');
 		}
 
 		$this -> e();
