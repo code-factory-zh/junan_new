@@ -42,14 +42,19 @@ class OrderController extends CommonController {
 			$where .= ' and o.created_time < ' . strtotime($end_time);
 		}
 
-		$courses = $this->order->getOrderList($where);
+		$page = I('page');
+
+		$limit = pageLimit($page);
+
+		$courses = $this->order->getOrderList($where, $limit);
 
 		$data['param'] = [
 			'begin_time' => $begin_time,
 			'end_time' => $end_time,
 		];
 
-		$data['list'] = $courses;
+		$data['list'] = $courses['list'];
+		$data['page'] = page($courses['count'], $page);
 		$this->assign($data);
 		$this->display();
 	}
@@ -117,7 +122,7 @@ class OrderController extends CommonController {
 		];
 
 		$courses_export = [];
-		foreach($courses as $k => $v){
+		foreach($courses['list'] as $k => $v){
 			$courses_export[] = [
 				'id' => $v['id'],
 				'order_num' => $v['order_num'],

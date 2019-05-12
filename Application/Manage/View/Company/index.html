@@ -263,6 +263,29 @@
                 $('#county').html(countyHtml)
             }
         }
+        // 获取url参数
+      function getQueryString(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+          var r = decodeURI(window.location.search).substr(1).match(reg);
+          if (r != null) return unescape(r[2]);
+          return null;
+      }
+      // 如果url带上了省市区,初始化城市选择
+      console.log(555)
+        console.log(getQueryString('province'))
+      console.log(getQueryString('city'))
+      console.log(getQueryString('county'))
+      if (getQueryString('province')) {
+          $('#province').val(getQueryString('province'))
+          changeProvince()
+      }
+      if (getQueryString('city')) {
+          $('#city').val(getQueryString('city'))
+          changeCity()
+      }
+      if (getQueryString('county')) {
+          $('#county').val(getQueryString('county'))
+      }
     </script>
   </body>
 </html>

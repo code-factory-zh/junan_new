@@ -42,7 +42,6 @@ class CompanyController extends CommonController
     public function index()
     {
     	$params = I('get.');
-		$where = '1=1';
 		$industry = $params['type'];
 		$address = $params['address'];
 		$province = $params['province'];
@@ -50,29 +49,29 @@ class CompanyController extends CommonController
 		$county = $params['county'];
 
 		if($industry){
-			$where .= ' and industry='.$industry;
+			$where['industry'] = $industry;
 		}
 
 		if($province && $province != '-'){
-			$where .= ' and province="' . $province . '"';
+			$where['province'] = $province;
 		}
 
 		if($city && $city != '-'){
-			$where .= ' and city="' . $city . '"';
+			$where['city'] = $city;
 		}
 
 		if($county && $county != '-'){
-			$where .= ' and county="' . $county . '"';
+			$where['county'] = $county;
 		}
 
 		if($address){
-			$where .= ' and address like "%' . $address . '%"';
+			$where['address'] = ['like', '%' . $address . '%'];
 		}
 
         $page = I('page');
 
         $limit = pageLimit($page);
-        $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time', [], $limit);
+        $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time', $where, $limit);
 
 		//取行业类型
 		$data['industry'] = [
@@ -228,7 +227,6 @@ class CompanyController extends CommonController
 	 */
 	public function import_data(){
 		$params = I('get.');
-		$where = '1=1';
 		$industry = $params['type'];
 		$address = $params['address'];
 		$province = $params['province'];
@@ -236,25 +234,26 @@ class CompanyController extends CommonController
 		$county = $params['county'];
 
 		if($industry){
-			$where .= ' and industry='.$industry;
+			$where['industry'] = $industry;
 		}
 
 		if($province && $province != '-'){
-			$where .= ' and province="' . $province . '"';
+			$where['province'] = $province;
 		}
 
 		if($city && $city != '-'){
-			$where .= ' and city="' . $city . '"';
+			$where['city'] = $city;
 		}
 
 		if($county && $county != '-'){
-			$where .= ' and county="' . $county . '"';
+			$where['county'] = $county;
 		}
 
 		if($address){
-			$where .= ' and address like "%' . $address . '%"';
+			$where['address'] = ['like', '%' . $address . '%'];
 		}
-		$companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time');
+
+		$companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time', $where, '');
 
 		//取行业类型
 		$industry = [
@@ -268,7 +267,7 @@ class CompanyController extends CommonController
 		];
 
 		$company_export = [];
-		foreach($companys as $k => $v){
+		foreach($companys['list'] as $k => $v){
 			$company_export[] = [
 				'id' => $v['id'],
 				'code' => $v['code'],

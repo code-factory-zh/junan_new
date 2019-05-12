@@ -23,13 +23,26 @@ class OrderModel extends BaseModel
      * 取得订单列表信息
      * @DateTime 2019/4/21 下午10:57
      */
-    public function getOrderList($where = null)
+    public function getOrderList($where = null, $limit = '')
     {
-		return $this->alias('o')
+		$count = $this->alias('o')
 			->field('o.order_num, o.id, o.amount, o.price, o.pay_type, o.remark, o.created_time, o.status, c.company_name')
 			->join('company as c on o.company_id = c.id', 'left')
 			->where($where)
+			->limit($limit)
+			->count();
+
+		$list = $this->alias('o')
+			->field('o.order_num, o.id, o.amount, o.price, o.pay_type, o.remark, o.created_time, o.status, c.company_name')
+			->join('company as c on o.company_id = c.id', 'left')
+			->where($where)
+			->limit($limit)
 			->select();
+
+		return [
+			'list' => $list,
+			'count' => $count,
+		];
     }
 
 	public function _before_update(&$data, $options)
