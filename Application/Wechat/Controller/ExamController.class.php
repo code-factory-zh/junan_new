@@ -169,6 +169,7 @@ class ExamController extends CommonController
 
 					$result = $this->member->add($exam_score_data);
 					if($result){
+						$data['is_pass_exam'] = ($score >= $is_pass_exam_info['pass_score']) ? 1 : 0;
 						$this->rel($data)->e();
 					}else{
 						$this->e('系统错误');
@@ -583,6 +584,7 @@ class ExamController extends CommonController
 
 		$result = $this->member->add($exam_score_data);
 		if($result){
+			$data['is_pass_exam'] = ($score >= $is_pass_exam_info['pass_score']) ? 1 : 0;
 			$this->rel($data)->e();
 		}else{
 			$this->e('交卷失败');
