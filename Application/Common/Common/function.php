@@ -188,8 +188,9 @@
 		}
 
 		$begin = $pageSize * $page;
-		$begin != 0 && $begin ++;
+//		$begin != 0 && $begin ++;
 		return $begin . ',' . $pageSize;
+
 	}
 
 	/**
