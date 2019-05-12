@@ -55,6 +55,7 @@ class OrderController extends CommonController {
 
 		$data['list'] = $courses['list'];
 		$data['page'] = page($courses['count'], $page);
+		$data['page_index'] = I('page') ? I('page') : 1;
 		$this->assign($data);
 		$this->display();
 	}

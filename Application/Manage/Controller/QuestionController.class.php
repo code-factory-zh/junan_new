@@ -52,7 +52,11 @@ class QuestionController extends CommonController
 		//        $params = $this->_get($_GET);
 		$params = I('get.');
 
-		$list = $this->question->getAll('*', 'is_deleted = 0', $params['page'], $params['pageNum']);
+		$page = I('page');
+
+		$limit = pageLimit($page, 10);
+
+		$list = $this->question->getAll2('*', 'is_deleted = 0', $limit);
 
 		//将1,2,3,4转成ABCD
 		//增加选项的匹配
@@ -74,7 +78,7 @@ class QuestionController extends CommonController
 
 		$courseList = $this->course->getList();
 		$array = array_column($courseList, 'name', 'id');
-		foreach ($list as &$val)
+		foreach ($list['list'] as &$val)
 		{
 			$val['course_id'] = $array[$val['course_id']];
 			$option = json_decode($val['option'], true);
@@ -107,7 +111,9 @@ class QuestionController extends CommonController
 			}
 		}
 
-		$this->assign(['data' => $list]);
+		$data['page'] = page($list['count'], $page);
+		$this->assign(['data' => $list['list']]);
+		$this->assign(['page' => $data['page']]);
 		$this->display('Question/index');
 	}
 

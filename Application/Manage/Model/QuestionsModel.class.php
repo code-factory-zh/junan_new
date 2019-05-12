@@ -36,6 +36,21 @@ class QuestionsModel extends BaseModel {
         }
     }
 
+	/**
+	 * 获取多条记录 -- 后台获取题目的时候使用
+	 * return array
+	 * */
+	public function getAll2($select = '*', $where = '', $limit = '', $order = 'id desc')
+	{
+		$list = $this -> field($select) -> where($where) -> order($order) -> limit($limit) -> select();
+		$count = $this -> field($select) -> where($where) -> order($order)->limit($limit) -> count();
+
+		return [
+			'list' => $list,
+			'count' => $count,
+		];
+	}
+
     /**
      * 取得题目信息
      * @DateTime 2019-01-08T18:09:05+0800
