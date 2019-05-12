@@ -54,7 +54,7 @@ class CompanyController extends CommonController
 			$where .= ' and address="' . $address . '"';
 		}
 
-        $page = I('page');
+        $page = I('p');
 
         $limit = pageLimit($page);
         $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time', [], $limit);
@@ -76,9 +76,10 @@ class CompanyController extends CommonController
 			'current_time' => time()
 		];
 
-        $data['page'] = page($companys['count'], $page);
-        // pr($data['page']);
+        $page = new \Think\Page($companys['count'], 10);
+        $data['page'] = $page -> show();
         $data['list'] = $companys['list'];
+
         $this->assign($data);
         $this->display();
     }
