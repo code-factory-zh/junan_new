@@ -225,7 +225,7 @@ class IndexController extends CommonController{
 	 */
 	public function login() {
 
-		$this -> _get($p, ['code' => '帐号', 'pwd' => '密码', 'open_id']);
+		$this -> _post($p, ['code' => '帐号', 'pwd' => '密码', 'open_id']);
 
 		if (!preg_match("/^[\w\d]{6,}/i", $p['code'])) {
 			$this -> e('用户名必须是英文+数字的组合，且不得少于6个字。');
