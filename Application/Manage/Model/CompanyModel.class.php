@@ -37,8 +37,15 @@ class CompanyModel extends BaseModel
 	 * 取得所有公司名称
 	 * @DateTime 2018-12-10
 	 */
-	public function getCompanys($fields, $where = []) {
-		return $this -> where($where) -> getField($fields);
+	public function getCompanys($fields, $where = [], $limit = '') {
+
+        $count = $this -> where($where) -> count();
+		$list = $this -> where($where) -> limit($limit) -> getField($fields);
+
+        return [
+            'list' => $list,
+            'count' => $count,
+        ];
 	}
 
 	public function _before_update(&$data, $options)

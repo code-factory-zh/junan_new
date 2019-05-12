@@ -914,8 +914,28 @@ a:focus {
 }
 footer {
     background: #fff;
-    padding: 15px 20px;
-    display: block
+    padding: 15px 20px 25px 20px;
+    display: block;
+    margin-top:-15px;
+}
+.page ul{
+    margin-top:20px;
+    padding:0;
+}
+.page ul li {
+    display:block;
+}
+.page ul li a.this{
+    background:#c36;
+    color:#fff;
+    border:1px solid #c36;
+}
+.page ul li a {
+    margin-right:5px;
+    float:left;
+    list-style-type: none;
+    padding:3px 12px;
+    border:1px solid #ddd;
 }
 .nav-sm footer {
     margin-left: 70px
