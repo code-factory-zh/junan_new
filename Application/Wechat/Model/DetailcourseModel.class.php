@@ -34,6 +34,18 @@ class DetailcourseModel extends CommonModel {
 
 
     /**
+     * 取得当前用户所有已经学习的课程
+     * @Author   邱湘城
+     * @DateTime 2019-05-12T23:40:37+0800
+     */
+    public function getCourseListFull($where) {
+
+        return $this -> table('company_account_course_chapter') -> field('course_id, chapter_id') ->
+        where($where) -> select();
+    }
+
+
+    /**
      * 取某课程上一章和下一章的ID
      * @Author   邱湘城
      * @DateTime 2019-01-21T22:21:24+0800
