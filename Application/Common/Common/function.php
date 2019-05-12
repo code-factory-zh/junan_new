@@ -173,3 +173,87 @@
 		}
 		return $res;
 	}
+
+
+	/**
+	 * 返回LIMIT
+	 * @Author   邱湘城
+	 * @DateTime 2019-05-12T14:04:52+0800
+	 */
+	function pageLimit($page, $pageSize = 10) {
+
+		$page -= 1;
+		if ($page < 0) {
+			$page = 0;
+		}
+
+		$begin = $pageSize * $page;
+		$begin != 0 && $begin ++;
+		return $begin . ',' . $pageSize;
+	}
+
+	/**
+	 * 分页功能
+	 * @Author   邱湘城
+	 * @DateTime 2019-05-12T13:01:03+0800
+	 */
+	function page($total, $page = 1, $pageSize = 10, $max = 5) {
+
+		$params = parse_url($_SERVER['REQUEST_URI']);
+
+		$url = preg_replace('/page=[\d]*/', '', $params['query']);
+		$url = rtrim($url, '&');
+
+		$html = '';
+		$prev = '';
+		$next = '';
+
+		$page <= 0 && $page = 1;
+
+		// 让高亮的那一页始终在分页页码中间
+		$pageNum = ceil($total / $pageSize);
+
+		$fromIdx = $page - floor($max / 2);
+		if ($fromIdx <= 0) {
+			$fromIdx = 1;
+		}
+
+		$end = $max + $fromIdx;
+
+		$haveNext = true;
+		if ($end > $pageNum) {
+			$fromIdx -= $end - $pageNum - 1;
+			$end = $pageNum + 1;
+			$fromIdx <= 0 && $fromIdx = 0;
+		}
+
+		if ($end - $fromIdx < $max) {
+			$fromIdx = $max - ($end - $fromIdx);
+		}
+
+		for ($i = $fromIdx; $i < $end; $i ++) {
+			if ($i <= $pageNum) {
+				$_this = '';
+				if ($i == $page) {
+					$_this = 'class="this"';
+				}
+				$html .= "<li><a {$_this} href=\"{$params['path']}?{$url}&page={$i}\">第{$i}页</a></li>";
+			}
+		}
+
+		if ($page + 1 >= $end) {
+			$haveNext = false;
+		}
+
+		if ($haveNext) {
+			$n = $page + 1;
+			$next = "<li><a href=\"{$params['path']}?{$url}&page={$n}\">下一页</a></li>";
+		}
+
+		if ($page - 1 > 0) {
+			$p = $page - 1;
+			$prev = "<li><a href=\"{$params['path']}?{$url}&page={$p}\">上一页</a></li>";
+		}
+
+		return '<div class="page" style="background: #fff"><ul>' . $prev . $html . $next . '</ul><div style="clear:both"></div></div>';
+	}

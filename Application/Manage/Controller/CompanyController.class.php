@@ -68,7 +68,11 @@ class CompanyController extends CommonController
 		if($address){
 			$where .= ' and address like "%' . $address . '%"';
 		}
-        $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time');
+
+        $page = I('page');
+
+        $limit = pageLimit($page);
+        $companys = $this->company->where($where)->getCompanys('id,code,company_name,created_time,status,credit_code,industry,province,city,address,active_time', [], $limit);
 
 		//取行业类型
 		$data['industry'] = [
@@ -90,7 +94,9 @@ class CompanyController extends CommonController
 			'current_time' => time(),
 		];
 
-        $data['list'] = $companys;
+        $data['page'] = page($companys['count'], $page);
+        // pr($data['page']);
+        $data['list'] = $companys['list'];
         $this->assign($data);
         $this->display();
     }
