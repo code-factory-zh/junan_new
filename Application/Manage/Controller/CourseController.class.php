@@ -119,9 +119,9 @@ class CourseController extends CommonController {
 			//2.该课程是否有人购买，在学习进度无效的时候是否考试通过了，如果没通过也不给删除。
 			$is_not_pass_list = $this->company_account->getRecord(['course_id' => $data['id'], 'is_pass_exam' => 0]);
 
-			if($is_not_pass_list){
-				$this->e('此课程正在被使用,不能被删除');
-			}
+			// if($is_not_pass_list){
+			// 	$this->e('此课程正在被使用,不能被删除');
+			// }
 
 			$result = $this->course->save($data);
 			if($result){
