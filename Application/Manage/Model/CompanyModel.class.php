@@ -20,6 +20,11 @@ class CompanyModel extends BaseModel
     {
         parent::_initialize();
     }
+	
+	public function delReal($where) {
+
+		return $this->where($where)->delete();
+    }
 
     /**
      * 取得账号信息

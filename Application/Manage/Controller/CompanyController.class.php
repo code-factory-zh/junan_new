@@ -29,6 +29,12 @@ class CompanyController extends CommonController
 		$this->account = new \Manage\Model\AccountModel;
     }
 
+    public function dl() {
+
+        $this->_get($p, ['company_id']);
+        $this->company->delReal("id={$p['company_id']}");
+        exit(header("location:/manage/company/index"));
+    }
 
     /**
      * 接入公司管理-列表

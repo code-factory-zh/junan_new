@@ -95,7 +95,8 @@
                          <a href="/manage/company/account_list/?company_id={$v.id}"><button class="btn btn-success btn-sm" idvalue="{$v.id}">考生列表</button></a>
 
                          <a href="/manage/company/active_time/?id={$v.id}"><button class="btn btn-success btn-sm">有效期设置</button></a>
-                       </if>
+					   </if>
+					   <a href="javascript:;" data-id="{$v.id}" class="btn btn-danger dl">彻底删除</a>
                    </td>
                  </tr>
                  </foreach>
@@ -167,6 +168,13 @@
 //          })
 //          return false
       })
+
+	  $(".dl").click(function() {
+		  if (confirm("确定要完全删除吗？本操作将不可恢复！")) {
+			window.location.href = "/manage/company/dl?company_id=" + $(this).attr('data-id')
+		  }
+		  return false
+	  })
     </script>
   </body>
 </html>
